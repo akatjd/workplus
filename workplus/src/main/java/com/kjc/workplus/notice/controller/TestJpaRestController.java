@@ -57,7 +57,8 @@ public class TestJpaRestController {
 	}
 	
 	// 회원 입력
-	@PostMapping public ResponseEntity<MemberVO> save(MemberVO member) {
+	@PostMapping
+	public ResponseEntity<MemberVO> save(MemberVO member) {
 		return new ResponseEntity<MemberVO>(memberService.save(member), HttpStatus.OK); 
 	} 
 	

@@ -12,12 +12,15 @@ import java.util.Optional;
 
 @Service
 public class MemberService {
-	@Autowired private MemberRepository memberRepository;
+	@Autowired
+	private MemberRepository memberRepository;
 	
 	public List<MemberVO> findAll() {
 		List<MemberVO> members = new ArrayList<>();
 		
-		memberRepository.findAll().forEach(e -> members.add(e)); return members; 
+		memberRepository.findAll().forEach(e -> members.add(e)); 
+		
+		return members; 
 	} 
 	
 	public Optional<MemberVO> findById(Long mbrNo) { 
@@ -32,6 +35,8 @@ public class MemberService {
 	
 	public MemberVO save(MemberVO member) { 
 		memberRepository.save(member);
+		
+//		memberRepository.save(new MemberVO("idtest", "이름테스트"));
 		
 		return member;
 	}
