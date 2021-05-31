@@ -3,14 +3,13 @@ package com.kjc.workplus;
 
 import java.time.LocalDateTime;
 
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kjc.workplus.notice.domain.Notice;
+import com.kjc.workplus.notice.dto.NoticeResponseDto;
 import com.kjc.workplus.notice.repository.NoticeRepository;
 
 @SpringBootTest
@@ -28,22 +27,27 @@ public class NoticeRepositoryTests {
 	void contextLoads() {
 	}
 	
+	/**
+	 * 공지사항 wp_notice 테스트 데이터 삽입 (10개)
+	 */
 	@Test
 	public void noticeTest() {
 		String title = "테스트 게시글";
 		String content = "테스트 본문";
 		
-		noticeRepository.save(Notice.builder()
-									.title(title)
-									.content(content)
-									.viewCnt(10L)
-									.writer("김민성")
-									.createdDate(LocalDateTime.now())
-									.deleteYn("N")
-									.updatedId("김민성")
-									.updatedDate(LocalDateTime.now())
-									.fileId(null)
-									.build());
+		for(int i=0; i<10; i++) {
+			noticeRepository.save(Notice.builder()
+					.title(title + Integer.toString(i))
+					.content(content + Integer.toString(i))
+					.viewCnt(10L)
+					.writer("김민성" + Integer.toString(i))
+					.createdDate(LocalDateTime.now())
+					.deleteYn("N")
+					.updatedId("김민성" + Integer.toString(i))
+					.updatedDate(LocalDateTime.now())
+					.fileId(null)
+					.build());
+		}
 		
 //		Notice notice = new Notice();
 //		notice.setTitle("제목 테스트");
@@ -57,6 +61,19 @@ public class NoticeRepositoryTests {
 //		notice.setFileId("파일 아이디 테스트");
 //		
 //		noticeRepository.save(notice);
+	}
+	
+	@Test
+	public void findById() {
+		
+		System.out.println("테스트함");
+		
+		Long noticeSeq = 1L;
+		
+		Notice notice = noticeRepository.findById(noticeSeq)
+										.orElseThrow(() -> new IllegalAccessError(" 해당 게시글이 존재하지 않습니다."));
+		
+		System.out.println(notice);
 	}
 
 }

@@ -22,6 +22,9 @@ public class NoticeSaveRequestDto {
 	private LocalDateTime updatedDate;
 	private String fileId;
 	
+	/**
+	 * 공지사항 글쓰기 생성자
+	 */
 	@Builder
 	public NoticeSaveRequestDto(String title, String content, Long viewCnt, String writer, 
 			LocalDateTime createdDate, String deleteYn, String updatedId, LocalDateTime updatedDate, String fileId) {
@@ -30,6 +33,20 @@ public class NoticeSaveRequestDto {
 	  this.viewCnt = viewCnt;
 	  this.writer = writer;
 	  this.createdDate = createdDate;
+	  this.deleteYn = deleteYn;
+	  this.updatedId = updatedId;
+	  this.updatedDate = updatedDate;
+	  this.fileId = fileId;
+	}
+	
+	
+	/**
+	 * 공지사항 수정 생성자
+	 */
+	@Builder
+	public NoticeSaveRequestDto(String title, String content, String deleteYn, String updatedId, LocalDateTime updatedDate, String fileId) {
+	  this.title = title;
+	  this.content = content;
 	  this.deleteYn = deleteYn;
 	  this.updatedId = updatedId;
 	  this.updatedDate = updatedDate;

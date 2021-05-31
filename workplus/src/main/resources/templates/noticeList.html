@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="board/layout/basic">
+<head>
+<title>일더하기 Work+</title>
+
+</head>
+<body>
+
+<h1>공지사항</h1>
+
+<table>
+	<thead>
+		<tr>
+			<th>번호</th>
+			<th>제목</th>
+			<th>조회수</th>
+			<th>작성자</th>
+			<th>작성일자</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr th:each="notice : ${noticeDtoList}">
+			<td>
+				<span th:text="${notice.seq}"></span>
+			</td>
+			<td>
+				<span th:text="${notice.title}"></span>
+			</td>
+			<td>
+				<a th:href="|@{/workplus/notice/view.do}?noticeSeq=${notice.seq}|" th:text="${notice.title}"></a>
+			</td>
+			<td>
+				<span th:text="${notice.viewCnt}"></span>
+			</td>
+			<td>
+				<span th:text="${notice.writer}"></span>
+			</td>
+			<td>
+				<span th:text="${notice.createdDate}"></span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div>
+	<button onclick="location.href='/workplus/notice/write.do'">글작성</button>
+</div>
+
+
+</body>
+
+</html>

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.kjc.workplus.notice.domain.Notice;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -20,6 +21,7 @@ public class NoticeResponseDto {
 	private LocalDateTime updatedDate;
 	private String fileId;
 	
+	@Builder
 	public NoticeResponseDto(Notice notice) {
 		this.seq = notice.getSeq();
 		this.title = notice.getTitle();

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="board/layout/basic">
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+$(function () {
+
+	var formObj = $("form[role='form']");
+	console.log(formObj);
+	
+	$(".btn-primary").on("click", function(){
+		formObj.attr("action", "/samplehome/board/modify");
+		formObj.attr("method", "post");
+		formObj.submit();
+	});
+	
+	$(".btn-warning").on("click", function(){
+		formObj.attr("action", "/workplus/notice/");
+		formObj.attr("method", "get");
+		formObj.submit();
+	});
+
+  });
+
+/*]]>*/
+</script>
+
+<head>
+<title>일더하기 Work+</title>
+
+</head>
+<body>
+
+<h1>공지사항 글쓰기</h1>
+
+<th:block layout:fragment="content">
+		<div class="card-content">
+
+
+
+				
+				<div class="box-footer">
+	           		<button type="submit" class="btn btn-primary">Submit</button>
+	             	<button type="submit" class="btn btn-warning">Cancel</button>
+	            </div>
+
+			</form>
+		</div>
+		<!-- /.card-content -->
+	</th:block>
+
+</body>
+
+</html>
