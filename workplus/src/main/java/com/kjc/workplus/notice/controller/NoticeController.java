@@ -1,5 +1,6 @@
 package com.kjc.workplus.notice.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,14 +11,19 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.kjc.workplus.notice.domain.Notice;
 import com.kjc.workplus.notice.dto.NoticeResponseDto;
+import com.kjc.workplus.notice.dto.NoticeSaveRequestDto;
 import com.kjc.workplus.notice.service.NoticeService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,11 +33,11 @@ import lombok.RequiredArgsConstructor;
 @Controller
 public class NoticeController {
 	
-	private Logger logger = LoggerFactory.getLogger(NoticeController.class);
-	
-	@Autowired
 	private final NoticeService noticeService;
 	
+	/**
+	 * 공지사항 리스트 확인
+	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String openNoticeList(Model model) {
 		
@@ -42,6 +48,9 @@ public class NoticeController {
 		return "noticeList";
 	}
 	
+	/**
+	 * 공지사항 상세내용 확인
+	 */
 	@GetMapping(value = "/view.do")
 	public String openNoticeDetail(@RequestParam(value = "noticeSeq", required = false) Long noticeSeq, Model model) {
 		
@@ -55,10 +64,40 @@ public class NoticeController {
 		return "noticeView";
 	}
 	
+	/**
+	 * 공지사항 글쓰기 화면 출력
+	 */
 	@GetMapping(value = "/write.do")
-	public String openNoticeWrite(Model model) {
+	public String openNoticeWrite(NoticeSaveRequestDto noticeSaveRequestDto, Model model) {
+		model.addAttribute("noticeSaveRequestDto", new NoticeSaveRequestDto());
+		
 		return "noticeWrite";
 	}
+	
+	/** 게시글 - 등록 */
+    @PostMapping(value = "/register.do")
+    public String save(NoticeSaveRequestDto noticeSaveRequestDto, Model model) {
+    	
+    	System.out.println(noticeSaveRequestDto.getTitle());
+    	System.out.println(noticeSaveRequestDto.getContent());
+    	
+    	model.addAttribute("noticeSaveRequestDto", noticeSaveRequestDto);
+    	
+        noticeService.save(noticeSaveRequestDto);
+ 
+        return "noticeWrite";
+    }
+    
+//    /** 게시글 - 등록 */
+//    @PostMapping(value = "/register.do")
+//    public String save(@RequestParam("id1")String id, Model model) {
+//    	
+//    	System.out.println(id);
+//    	
+//    	model.addAttribute("id2", id);
+// 
+//        return "noticeWrite";
+//    }
 	
 
 //	/**

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kjc.workplus.notice.domain.Notice;
 import com.kjc.workplus.notice.dto.NoticeResponseDto;
+import com.kjc.workplus.notice.dto.NoticeSaveRequestDto;
 import com.kjc.workplus.notice.repository.NoticeRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -41,4 +42,12 @@ public class NoticeService {
 		
 		return new NoticeResponseDto(notice);
 	}
+	
+	/** 게시글 - 등록 */
+    @Transactional
+    public Long save(NoticeSaveRequestDto noticeSaveRequestDto) {
+ 
+        return noticeRepository.save(noticeSaveRequestDto.toEntity())
+                              .getSeq();
+    }
 }

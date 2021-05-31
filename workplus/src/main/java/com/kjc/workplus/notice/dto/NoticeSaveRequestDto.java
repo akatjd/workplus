@@ -39,19 +39,18 @@ public class NoticeSaveRequestDto {
 	  this.fileId = fileId;
 	}
 	
-	
-	/**
-	 * 공지사항 수정 생성자
-	 */
-	@Builder
-	public NoticeSaveRequestDto(String title, String content, String deleteYn, String updatedId, LocalDateTime updatedDate, String fileId) {
-	  this.title = title;
-	  this.content = content;
-	  this.deleteYn = deleteYn;
-	  this.updatedId = updatedId;
-	  this.updatedDate = updatedDate;
-	  this.fileId = fileId;
-	}
+//	/**
+//	 * 공지사항 수정 생성자
+//	 */
+//	@Builder
+//	public NoticeSaveRequestDto(String title, String content, String deleteYn, String updatedId, LocalDateTime updatedDate, String fileId) {
+//	  this.title = title;
+//	  this.content = content;
+//	  this.deleteYn = deleteYn;
+//	  this.updatedId = updatedId;
+//	  this.updatedDate = updatedDate;
+//	  this.fileId = fileId;
+//	}
 
 	public Notice toEntity() {
 		return Notice.builder()

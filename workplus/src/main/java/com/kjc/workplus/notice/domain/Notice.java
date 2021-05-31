@@ -27,10 +27,10 @@ public class Notice {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long seq;
 
-	@Column(name = "title", length = 200, nullable = false)
+	@Column(name = "title", length = 200, nullable = true)
 	private String title;
 
-	@Column(name = "content", columnDefinition = "TEXT", nullable = false)
+	@Column(name = "content", columnDefinition = "TEXT", nullable = true)
 	private String content;
 
 	@Column(name = "view_cnt")
