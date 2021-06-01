@@ -20,7 +20,7 @@ public class NoticeService {
 	private final NoticeRepository noticeRepository;
 	
 	/**
-	 * 게시글 - 목록 조회
+	 * 공지사항 목록 조회
 	 */
 	@Transactional(readOnly = true)
 	public List<NoticeResponseDto> findAll() {
@@ -32,7 +32,7 @@ public class NoticeService {
 	}
 	
 	/**
-	 * 게시글 - 상세 조회
+	 * 공지사항 상세 조회
 	 */
 	@Transactional(readOnly = true)
 	public NoticeResponseDto findById(Long noticeSeq) {
@@ -43,11 +43,25 @@ public class NoticeService {
 		return new NoticeResponseDto(notice);
 	}
 	
-	/** 게시글 - 등록 */
+	/**
+	 * 공지사항 등록
+	 */
     @Transactional
     public Long save(NoticeSaveRequestDto noticeSaveRequestDto) {
  
         return noticeRepository.save(noticeSaveRequestDto.toEntity())
                               .getSeq();
+    }
+    
+    /**
+     * 공지사항 삭제
+     */
+    @Transactional
+    public void delete(Long noticeSeq) {
+ 
+        Notice notice = noticeRepository.findById(noticeSeq)
+                                     .orElseThrow(() -> new IllegalAccessError("[noticeSeq=" + noticeSeq + "] 해당 게시글이 존재하지 않습니다."));
+ 
+        noticeRepository.delete(notice);
     }
 }

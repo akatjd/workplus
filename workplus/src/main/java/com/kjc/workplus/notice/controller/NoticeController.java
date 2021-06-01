@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,24 +69,38 @@ public class NoticeController {
 	 * 공지사항 글쓰기 화면 출력
 	 */
 	@GetMapping(value = "/write.do")
-	public String openNoticeWrite(NoticeSaveRequestDto noticeSaveRequestDto, Model model) {
-		model.addAttribute("noticeSaveRequestDto", new NoticeSaveRequestDto());
-		
-		return "noticeWrite";
+	public String openNoticeWrite(@RequestParam(value = "noticeSeq", required = false) Long noticeSeq, NoticeSaveRequestDto noticeSaveRequestDto, Model model) {
+		if(noticeSeq == null) {
+			return "noticeWrite";
+		}else {
+			NoticeResponseDto noticeResponseDto = noticeService.findById(noticeSeq);
+
+			model.addAttribute("noticeResponseDto", noticeResponseDto);
+			
+			return "noticeWrite";
+		}
 	}
 	
-	/** 게시글 - 등록 */
-    @PostMapping(value = "/register.do")
-    public String save(NoticeSaveRequestDto noticeSaveRequestDto, Model model) {
-    	
-    	System.out.println(noticeSaveRequestDto.getTitle());
-    	System.out.println(noticeSaveRequestDto.getContent());
-    	
-    	model.addAttribute("noticeSaveRequestDto", noticeSaveRequestDto);
+	/**
+	 * 공지사항 글 등록
+	 */
+    @PostMapping(value = "/write.do")
+    public String openNoticeWrite(NoticeSaveRequestDto noticeSaveRequestDto) {
     	
         noticeService.save(noticeSaveRequestDto);
  
         return "noticeWrite";
+    }
+    
+    /**
+     * 공지사항 글 삭제하기
+     */
+    @GetMapping(value = "/delete.do")
+    public String delete(@RequestParam("noticeSeq") Long noticeSeq) {
+ 
+        noticeService.delete(noticeSeq);
+ 
+        return "noticeList";
     }
     
 //    /** 게시글 - 등록 */

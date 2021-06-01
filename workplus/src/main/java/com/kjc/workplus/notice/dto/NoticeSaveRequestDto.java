@@ -7,7 +7,9 @@ import com.kjc.workplus.notice.domain.Notice;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @Getter
 @NoArgsConstructor
 public class NoticeSaveRequestDto {
@@ -22,46 +24,41 @@ public class NoticeSaveRequestDto {
 	private LocalDateTime updatedDate;
 	private String fileId;
 	
-	/**
-	 * 공지사항 글쓰기 생성자
-	 */
-	@Builder
-	public NoticeSaveRequestDto(String title, String content, Long viewCnt, String writer, 
-			LocalDateTime createdDate, String deleteYn, String updatedId, LocalDateTime updatedDate, String fileId) {
-	  this.title = title;
-	  this.content = content;
-	  this.viewCnt = viewCnt;
-	  this.writer = writer;
-	  this.createdDate = createdDate;
-	  this.deleteYn = deleteYn;
-	  this.updatedId = updatedId;
-	  this.updatedDate = updatedDate;
-	  this.fileId = fileId;
-	}
-	
-//	/**
-//	 * 공지사항 수정 생성자
-//	 */
+
 //	@Builder
-//	public NoticeSaveRequestDto(String title, String content, String deleteYn, String updatedId, LocalDateTime updatedDate, String fileId) {
+//	public NoticeSaveRequestDto(String title, String content, Long viewCnt, String writer, 
+//			LocalDateTime createdDate, String deleteYn, String updatedId, LocalDateTime updatedDate, String fileId) {
 //	  this.title = title;
 //	  this.content = content;
+//	  this.viewCnt = viewCnt;
+//	  this.writer = writer;
+//	  this.createdDate = createdDate;
 //	  this.deleteYn = deleteYn;
 //	  this.updatedId = updatedId;
 //	  this.updatedDate = updatedDate;
 //	  this.fileId = fileId;
 //	}
+	
+	/**
+	 * 공지사항 글쓰기 생성자
+	 */
+	@Builder
+	public NoticeSaveRequestDto(String title, String content) {
+	  this.title = title;
+	  this.content = content;
+	}
 
 	public Notice toEntity() {
 		return Notice.builder()
 				.title(title)
 				.content(content)
-				.viewCnt(viewCnt)
-				.createdDate(createdDate)
-				.deleteYn(deleteYn)
-				.updatedId(updatedId)
-				.updatedDate(updatedDate)
-				.fileId(fileId)
+				.viewCnt(0L)
+				.writer("admin")
+				.createdDate(LocalDateTime.now())
+				.deleteYn("N")
+				.updatedId("admin")
+				.updatedDate(LocalDateTime.now())
+				.fileId(null)
 				.build();
 	}
 }
