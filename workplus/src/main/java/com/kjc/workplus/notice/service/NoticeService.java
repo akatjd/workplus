@@ -64,4 +64,22 @@ public class NoticeService {
  
         noticeRepository.delete(notice);
     }
+    
+    @Transactional
+    public void update(NoticeSaveRequestDto noticeSaveRequestDto) {
+    	
+//    	System.out.println(noticeSaveRequestDto.getSeq());
+//    	System.out.println(noticeSaveRequestDto.getTitle());
+//    	System.out.println(noticeSaveRequestDto.getContent());
+    	
+    	noticeRepository.update(noticeSaveRequestDto.getSeq(), noticeSaveRequestDto.getTitle(), noticeSaveRequestDto.getContent());
+    }
+    
+    @Transactional
+    public void updateDeleteYn(Long noticeSeq) {
+    
+    	noticeRepository.updateDeleteYn(noticeSeq, "Y");
+    }
+    
+
 }

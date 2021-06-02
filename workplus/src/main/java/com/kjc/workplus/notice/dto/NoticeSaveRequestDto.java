@@ -14,6 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class NoticeSaveRequestDto {
 	
+	private Long seq;
 	private String title;
 	private String content;
 	private Long viewCnt;
@@ -47,18 +48,40 @@ public class NoticeSaveRequestDto {
 	  this.title = title;
 	  this.content = content;
 	}
+	
+	@Builder
+	public NoticeSaveRequestDto(Long seq, String title, String content) {
+	  this.seq = seq;
+	  this.title = title;
+	  this.content = content;
+	}
 
 	public Notice toEntity() {
-		return Notice.builder()
-				.title(title)
-				.content(content)
-				.viewCnt(0L)
-				.writer("admin")
-				.createdDate(LocalDateTime.now())
-				.deleteYn("N")
-				.updatedId("admin")
-				.updatedDate(LocalDateTime.now())
-				.fileId(null)
-				.build();
+		if(seq == null) {
+			return Notice.builder()
+					.title(title)
+					.content(content)
+					.viewCnt(0L)
+					.writer("admin")
+					.createdDate(LocalDateTime.now())
+					.deleteYn("N")
+					.updatedId("admin")
+					.updatedDate(LocalDateTime.now())
+					.fileId(null)
+					.build();
+		}else {
+			return Notice.builder()
+					.seq(seq)
+					.title(title)
+					.content(content)
+					.viewCnt(0L)
+					.writer("admin")
+					.createdDate(LocalDateTime.now())
+					.deleteYn("N")
+					.updatedId("admin")
+					.updatedDate(LocalDateTime.now())
+					.fileId(null)
+					.build();
+		}
 	}
 }

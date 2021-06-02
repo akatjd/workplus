@@ -10,37 +10,17 @@
 
 	<h1>공지사항 글쓰기</h1>
 	
-	<table th:each="notice : ${noticeResponseDto}" border="1" width ="500" height="300" >
-	<thead>
-		<tr>
-			<td>공지번호</td>
-			<td>
-				<span th:text="${notice.seq}"></span>
-			</td>
-		</tr>
-		<tr>
-			<td>제목</td>
-			<td>
-				<span th:text="${notice.title}"></span>
-			</td>
-		</tr>
-		<tr>
-			<td>작성자</td>
-			<td>
-				<span th:text="${notice.writer}"></span>
-			</td>
-		</tr>
-		<tr>
-			<td>작성일자</td>
-			<td>
-				<span th:text="${notice.createdDate}"></span>
-			</td>
-		</tr>
-	</thead>
-	</table>
+	<form th:if="${noticeResponseDto!=null}" th:object="${noticeSaveRequestDto}" th:action="@{/workplus/notice/register.do}" method="post" id="frm">
+		<input type="hidden" th:field="${noticeResponseDto.seq}" name="seq" id="seq">
+	    제목 : <input type="text" th:field="${noticeResponseDto.title}" name="title" id="title" > <br>
+	    내용 : <input type="text" th:field="${noticeResponseDto.content}" name="content" id="content" > <br>
+		<div>
+			<a th:href="@{/workplus/notice/list.do}">메인</a>
+			<a href="#" onclick="document.getElementById('frm').submit();">전송</a>
+		</div>
+	</form>
 	
-	<form th:object="${noticeSaveRequestDto}" th:action="@{/workplus/notice/write.do}" method="post" id="frm">
-	
+	<form th:unless="${noticeResponseDto!=null}" th:object="${noticeSaveRequestDto}" th:action="@{/workplus/notice/register.do}" method="post" id="frm">	
 	    제목 : <input type="text" th:field="*{title}" name="title" id="title"> <br>
 	    내용 : <input type="text" th:field="*{content}" name="content" id="content"> <br>
 		
@@ -50,36 +30,6 @@
 		</div>
 	</form>
 
-	<!--  
-	<div class="container">
-	    <form action="/post" method="post">
-	        <div class="form-group row">
-	            <label for="inputTitle" class="col-sm-2 col-form-label"><strong>제목</strong></label>
-	            <div class="col-sm-10">
-	                <input type="text" name="title" class="form-control" id="inputTitle">
-	            </div>
-	        </div>
-	        <div class="form-group row">
-	            <label for="inputAuthor" class="col-sm-2 col-form-label"><strong>작성자</strong></label>
-	            <div class="col-sm-10">
-	                <input type="text" name="author" class="form-control" id="inputAuthor">
-	            </div>
-	        </div>
-	        <div class="form-group row">
-	            <label for="inputContent" class="col-sm-2 col-form-label"><strong>내용</strong></label>
-	            <div class="col-sm-10">
-	                <textarea type="text" name="content" class="form-control" id="inputContent"></textarea>
-	            </div>
-	        </div>
-	        <div class="row">
-	            <div class="col-auto mr-auto"></div>
-	            <div class="col-auto">
-	                <input class="btn btn-primary" type="submit" role="button" value="글쓰기">
-	            </div>
-	        </div>
-	    </form>
-	</div>
-	 -->
 </body>
 
 </html>

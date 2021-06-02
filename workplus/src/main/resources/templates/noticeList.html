@@ -8,7 +8,7 @@
 
 <h1>공지사항</h1>
 
-<table>
+<table border="1" width="500" height="300">
 	<thead>
 		<tr>
 			<th>번호</th>
@@ -17,14 +17,9 @@
 			<th>작성자</th>
 			<th>작성일자</th>
 		</tr>
-	</thead>
-	<tbody>
 		<tr th:each="notice : ${noticeDtoList}">
 			<td>
 				<span th:text="${notice.seq}"></span>
-			</td>
-			<td>
-				<span th:text="${notice.title}"></span>
 			</td>
 			<td>
 				<a th:href="|@{/workplus/notice/view.do}?noticeSeq=${notice.seq}|" th:text="${notice.title}"></a>
@@ -39,6 +34,9 @@
 				<span th:text="${notice.createdDate}"></span>
 			</td>
 		</tr>
+	</thead>
+	<tbody>
+		
 	</tbody>
 </table>
 

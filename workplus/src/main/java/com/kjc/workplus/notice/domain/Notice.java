@@ -57,16 +57,21 @@ public class Notice {
 	@Builder
 	public Notice(String title, String content, Long viewCnt, String writer, 
 			LocalDateTime createdDate, String deleteYn, String updatedId, LocalDateTime updatedDate, String fileId) {
-      this.title = title;
-      this.content = content;
-      this.viewCnt = viewCnt;
-      this.writer = writer;
-      this.createdDate = createdDate;
-      this.deleteYn = deleteYn;
-      this.updatedId = updatedId;
-      this.updatedDate = updatedDate;
-      this.fileId = fileId;
-  }
+		this.title = title;
+		this.content = content;
+		this.viewCnt = viewCnt;
+		this.writer = writer;
+		this.createdDate = createdDate;
+		this.deleteYn = deleteYn;
+		this.updatedId = updatedId;
+		this.updatedDate = updatedDate;
+		this.fileId = fileId;
+	}
+	
+	public void update(String title, String content) {
+		this.title = title;
+		this.content = content;
+	}
 
 	
 //    @Id
