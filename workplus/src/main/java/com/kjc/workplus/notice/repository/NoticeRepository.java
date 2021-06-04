@@ -1,5 +1,7 @@
 package com.kjc.workplus.notice.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +20,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
 	@Modifying
 	@Query("UPDATE Notice notice SET notice.deleteYn = :deleteYn WHERE notice.seq = :seq")
 	int updateDeleteYn(@Param("seq") Long seq, @Param("deleteYn") String deleteYn);
+	
+	@Query(value = "SELECT * FROM wp_notice WHERE delete_yn = 'N'", nativeQuery = true)
+	List<Notice> findAllNature();
 }

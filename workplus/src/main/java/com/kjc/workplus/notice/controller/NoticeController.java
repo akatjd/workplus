@@ -29,7 +29,7 @@ public class NoticeController {
 	@RequestMapping(value = "/list.do", method = RequestMethod.GET)
 	public String openNoticeList(Model model) {
 		
-		List<NoticeResponseDto> noticeDtoList = noticeService.findAll();
+		List<NoticeResponseDto> noticeDtoList = noticeService.findAllNature();
 		
 		model.addAttribute("noticeDtoList", noticeDtoList);
 		
@@ -80,7 +80,7 @@ public class NoticeController {
     		
     		noticeService.save(noticeSaveRequestDto);
     		
-    		List<NoticeResponseDto> noticeDtoList = noticeService.findAll();
+    		List<NoticeResponseDto> noticeDtoList = noticeService.findAllNature();
     		
     		model.addAttribute("noticeDtoList", noticeDtoList);
     		
@@ -105,7 +105,8 @@ public class NoticeController {
  
         noticeService.updateDeleteYn(noticeSeq);
         
-        List<NoticeResponseDto> noticeDtoList = noticeService.findAll();
+//      	List<NoticeResponseDto> noticeDtoList = noticeService.findAll();
+        List<NoticeResponseDto> noticeDtoList = noticeService.findAllNature();
 		
 		model.addAttribute("noticeDtoList", noticeDtoList);
  

@@ -6,10 +6,8 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.kjc.workplus.notice.domain.Notice;
-import com.kjc.workplus.notice.dto.NoticeResponseDto;
 import com.kjc.workplus.notice.repository.NoticeRepository;
 
 @SpringBootTest

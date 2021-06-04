@@ -23,9 +23,9 @@ public class NoticeService {
 	 * 공지사항 목록 조회
 	 */
 	@Transactional(readOnly = true)
-	public List<NoticeResponseDto> findAll() {
+	public List<NoticeResponseDto> findAllNature() {
 		
-		return noticeRepository.findAll()
+		return noticeRepository.findAllNature()
 								.stream()
 								.map(NoticeResponseDto::new)
 								.collect(Collectors.toList());
