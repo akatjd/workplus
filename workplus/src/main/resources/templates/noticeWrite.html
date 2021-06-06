@@ -20,21 +20,21 @@
 
 	<h1>공지사항 글쓰기</h1>
 	
-	<form th:if="${noticeResponseDto!=null}" th:object="${noticeSaveRequestDto}" th:action="@{/workplus/notice/register.do}" method="post" id="frm">
+	<form th:if="${noticeResponseDto!=null}" th:object="${noticeSaveRequestDto}" th:action="@{/workplus/notice/register.do}" method="post" id="frm" enctype="multipart/form-data">
 		<input type="hidden" th:field="${noticeResponseDto.seq}" name="seq" id="seq">
 	    제목 : <input type="text" th:field="${noticeResponseDto.title}" name="title" id="title" > <br>
 	    내용 : <input type="text" th:field="${noticeResponseDto.content}" name="content" id="content" > <br>
-	    파일은 선택해주세요 : <input type="file" class="custom-file-input" id="customFile">
+	    파일은 선택해주세요 : <input type="file" class="custom-file-input" name="file" id="file">
 		<div>
 			<a th:href="@{/workplus/notice/list.do}">메인</a>
 			<a href="#" onclick="document.getElementById('frm').submit();">전송</a>
 		</div>
 	</form>
 	
-	<form th:unless="${noticeResponseDto!=null}" th:object="${noticeSaveRequestDto}" th:action="@{/workplus/notice/register.do}" method="post" id="frm">	
+	<form th:unless="${noticeResponseDto!=null}" th:object="${noticeSaveRequestDto}" th:action="@{/workplus/notice/register.do}" method="post" id="frm" enctype="multipart/form-data">	
 	    제목 : <input type="text" th:field="*{title}" name="title" id="title"> <br>
 	    내용 : <input type="text" th:field="*{content}" name="content" id="content"> <br>
-		파일은 선택해주세요 : <input name="file" type="file" class="custom-file-input" id="customFile">
+		파일은 선택해주세요 : <input type="file" class="custom-file-input" name="file" id="file">
 		<div>
 			<a th:href="@{/workplus/notice/list.do}">메인</a>
 			<a href="#" onclick="document.getElementById('frm').submit();">전송</a>

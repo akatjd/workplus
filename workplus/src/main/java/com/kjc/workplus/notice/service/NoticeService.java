@@ -13,11 +13,15 @@ import com.kjc.workplus.notice.repository.NoticeRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Service
 public class NoticeService {
 	
-	private final NoticeRepository noticeRepository;
+	private NoticeRepository noticeRepository;
+	
+	public NoticeService(NoticeRepository noticeRepository) {
+		this.noticeRepository = noticeRepository;
+	}
 	
 	/**
 	 * 공지사항 목록 조회

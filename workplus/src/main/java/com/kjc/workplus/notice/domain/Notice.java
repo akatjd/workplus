@@ -25,7 +25,7 @@ public class Notice {
 	@Id
 	@Column(name = "notice_seq")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public Long seq;
+	private Long seq;
 
 	@Column(name = "title", length = 200, nullable = true)
 	private String title;
@@ -68,10 +68,10 @@ public class Notice {
 		this.fileId = fileId;
 	}
 	
-	public void update(String title, String content) {
-		this.title = title;
-		this.content = content;
-	}
+//	public void update(String title, String content) {
+//		this.title = title;
+//		this.content = content;
+//	}
 
 	
 //    @Id
