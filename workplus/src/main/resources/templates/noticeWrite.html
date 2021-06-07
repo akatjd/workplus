@@ -6,18 +6,29 @@
 	<title>일더하기 Work+</title>
 
 </head>
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script>
-	function btnClick(){
-		$("#file-list").append("파일은 선택해주세요 : <input type='file' name='file'><a href='#this' id='file-delete'>삭제</a><br>");
-
-	}
-	
-	function deleteClick(){
-		$("#file-list *").remove();
-	}
-
-</script>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script>
+    $(document).ready( function() {
+ 
+        $("input[type=file]").change(function () {
+            
+            var fileInput = document.getElementById("contract_file");
+            
+            var files = fileInput.files;
+            var file;
+            
+            for (var i = 0; i < files.length; i++) {
+                
+                file = files[i];
+ 
+                alert(file.name);
+            }
+            
+        });
+ 
+    });
+     
+  </script>
 
 <body>
 
@@ -27,7 +38,10 @@
 		<input type="hidden" th:field="${noticeResponseDto.seq}" name="seq" id="seq">
 	    제목 : <input type="text" th:field="${noticeResponseDto.title}" name="title" id="title" > <br>
 	    내용 : <input type="text" th:field="${noticeResponseDto.content}" name="content" id="content" > <br>
-	    파일은 선택해주세요 : <input type="file" name="file" id="file"><a href='#this' name='file-delete'>삭제</a>
+	    <div class="form-group" id="file-list" data-name="fileDiv">
+		    <a href="#this" th:onclick="addFile()">파일추가</a><br>
+		    파일은 선택해주세요 : <input type="file" name="file" id="file"><a href='#this' th:onclick="deleteClick()" id='file-delete'>삭제</a><br>
+	    </div>
 		<div>
 			<a th:href="@{/workplus/notice/list.do}">메인</a>
 			<a href="#" onclick="document.getElementById('frm').submit();">전송</a>
@@ -37,40 +51,15 @@
 	<form th:unless="${noticeResponseDto!=null}" th:object="${noticeSaveRequestDto}" th:action="@{/workplus/notice/register.do}" method="post" id="frm" enctype="multipart/form-data">	
 	    제목 : <input type="text" th:field="*{title}" name="title" id="title"> <br>
 	    내용 : <input type="text" th:field="*{content}" name="content" id="content"> <br>
-	    <div class="form-group" id="file-list">
-		    <a href="#this" th:onclick="btnClick()">파일추가</a><br>
-		    파일은 선택해주세요 : <input type="file" name="file" id="file"><a href='#this' th:onclick="deleteClick()" id='file-delete'>삭제</a><br>
-	    </div>
-		<div>
+		첨부할 파일들을 선택하세요 : <input multiple="multiple" type="file" name="file" id="contract_file"/>
+		<div id="btnDiv">
 			<a th:href="@{/workplus/notice/list.do}">메인</a>
 			<a href="#" onclick="document.getElementById('frm').submit();">전송</a>
 		</div>
 	</form>
+	
 
 </body>
 
-<script type="text/javascript" th:inline="javascript">
-	/*<![CDATA[*/
-    $(document).ready(function() {
-        $("a[name='file-delete']").on("click", function(e) {
-            e.preventDefault();
-            deleteFile($(this));
-        });
-    })
- 
-    function addFile() {
-        var str = "<input type='file' name='file'><a href='#this' name='file-delete'>삭제</a>";
-        $("#file-list").append(str);
-        $("a[name='file-delete']").on("click", function(e) {
-            e.preventDefault();
-            deleteFile($(this));
-        });
-    }
- 
-    function deleteFile(obj) {
-        obj.parent().remove();
-    }
-    /*]]>*/
-</script>
 
 </html>

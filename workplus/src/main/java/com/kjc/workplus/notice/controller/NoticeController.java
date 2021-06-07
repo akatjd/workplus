@@ -116,6 +116,8 @@ public class NoticeController {
     		try {
     			FilesDto filesDto = new FilesDto();
     			
+    			System.out.println("files.length : " + files.length);
+    			
     			String originFileName = files[0].getOriginalFilename();
     			String streFileName = new MD5Generator(originFileName).toString();
     			/* 오늘 날짜 */
