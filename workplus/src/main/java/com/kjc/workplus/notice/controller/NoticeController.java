@@ -110,34 +110,35 @@ public class NoticeController {
 	 * 공지사항 글 등록
 	 */
     @PostMapping(value = "/register.do")
-    public String openNoticeRegister(@RequestParam("file") MultipartFile files, NoticeSaveRequestDto noticeSaveRequestDto, Model model) {
+    public String openNoticeRegister(@RequestParam("file") MultipartFile[] files, NoticeSaveRequestDto noticeSaveRequestDto, Model model) {
     	
     	if(noticeSaveRequestDto.getSeq() == null) {
     		try {
+    			FilesDto filesDto = new FilesDto();
     			
-    			String originFileName = files.getOriginalFilename();
-        		String streFileName = new MD5Generator(originFileName).toString();
-        		/* 오늘 날짜 */
-        		String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
-        		/* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-        		String savePath = Paths.get("C:", "workplus", "files", today).toString();
-        		/* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-        		if(!new File(savePath).exists()) {
-        			try {
-        				new File(savePath).mkdir();
-        			}catch(Exception e) {
-        				e.getStackTrace();
-        			}
-        		}
-        		
-        		String fileStreCours = savePath + "\\" + streFileName;
-        		files.transferTo(new File(fileStreCours));
-        		
-        		FilesDto filesDto = new FilesDto();
-        		filesDto.setOriginFileName(originFileName);
-        		filesDto.setStreFileName(streFileName);
-        		filesDto.setFileStreCours(fileStreCours);
-        		
+    			String originFileName = files[0].getOriginalFilename();
+    			String streFileName = new MD5Generator(originFileName).toString();
+    			/* 오늘 날짜 */
+    			String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
+    			/* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+    			String savePath = Paths.get("C:", "workplus", "files", today).toString();
+    			/* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+    			if(!new File(savePath).exists()) {
+    				try {
+    					new File(savePath).mkdir();
+    				}catch(Exception e) {
+    					e.getStackTrace();
+    				}
+    			}
+    			
+    			String fileStreCours = savePath + "\\" + streFileName;
+    			files[0].transferTo(new File(fileStreCours));
+
+    			filesDto.setOriginFileName(originFileName);
+    			filesDto.setStreFileName(streFileName);
+    			filesDto.setFileStreCours(fileStreCours);
+    			filesDto.setFileSize(Long.valueOf(files[0].getSize()).intValue());
+    			
         		filesService.saveFiles(filesDto);
         		
         		noticeService.save(noticeSaveRequestDto);
