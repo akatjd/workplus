@@ -20,6 +20,7 @@ import com.kjc.workplus.files.service.FilesService;
 import com.kjc.workplus.files.utils.MD5Generator;
 import com.kjc.workplus.notice.dto.NoticeResponseDto;
 import com.kjc.workplus.notice.dto.NoticeSaveRequestDto;
+import com.kjc.workplus.notice.repository.NoticeRepository;
 import com.kjc.workplus.notice.service.NoticeService;
 
 import lombok.RequiredArgsConstructor;
@@ -52,11 +53,13 @@ public class NoticeController {
 	public String openNoticeDetail(@RequestParam(value = "noticeSeq", required = false) Long noticeSeq, Model model) {
 		
 		NoticeResponseDto noticeResponseDto = noticeService.findById(noticeSeq);
+		
+		noticeService.updateViewCnt(noticeSeq);
 
 		model.addAttribute("noticeResponseDto", noticeResponseDto);
 		
-//		List<AttachDTO> fileList = boardService.getAttachFileList(seq); // 추가된 로직
-//		model.addAttribute("fileList", fileList); // 추가된 로직
+		List<FilesDto> fileList = filesService.getFiles(noticeSeq); // 추가된 로직
+		model.addAttribute("fileList", fileList); // 추가된 로직
 
 		return "noticeView";
 	}
@@ -116,32 +119,38 @@ public class NoticeController {
     		try {
     			FilesDto filesDto = new FilesDto();
     			
-    			System.out.println("files.length : " + files.length);
-    			
-    			String originFileName = files[0].getOriginalFilename();
-    			String streFileName = new MD5Generator(originFileName).toString();
-    			/* 오늘 날짜 */
-    			String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
-    			/* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
-    			String savePath = Paths.get("C:", "workplus", "files", today).toString();
-    			/* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
-    			if(!new File(savePath).exists()) {
-    				try {
-    					new File(savePath).mkdir();
-    				}catch(Exception e) {
-    					e.getStackTrace();
+    			for(int i=0; i<files.length; i++) {
+    				String originFileName = files[i].getOriginalFilename();
+    				
+    				if(originFileName != null) {
+    					String streFileName = new MD5Generator(originFileName).toString();
+            			/* 오늘 날짜 */
+            			String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
+            			/* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+            			String savePath = Paths.get("C:", "workplus", "files", today).toString();
+            			/* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+            			if(!new File(savePath).exists()) {
+            				try {
+            					new File(savePath).mkdir();
+            				}catch(Exception e) {
+            					e.getStackTrace();
+            				}
+            			}
+            			
+            			String fileStreCours = savePath + "\\" + streFileName;
+            			files[i].transferTo(new File(fileStreCours));
+            			
+            			filesDto.setCategorySeq(noticeService.findSeqIncrement());
+            			filesDto.setCategory("NOTICE");
+            			filesDto.setFileNumber(i+1);
+            			filesDto.setOriginFileName(originFileName);
+            			filesDto.setStreFileName(streFileName);
+            			filesDto.setFileStreCours(fileStreCours);
+            			filesDto.setFileSize(Long.valueOf(files[i].getSize()).intValue());
+            			
+                		filesService.saveFiles(filesDto);
     				}
     			}
-    			
-    			String fileStreCours = savePath + "\\" + streFileName;
-    			files[0].transferTo(new File(fileStreCours));
-
-    			filesDto.setOriginFileName(originFileName);
-    			filesDto.setStreFileName(streFileName);
-    			filesDto.setFileStreCours(fileStreCours);
-    			filesDto.setFileSize(Long.valueOf(files[0].getSize()).intValue());
-    			
-        		filesService.saveFiles(filesDto);
         		
         		noticeService.save(noticeSaveRequestDto);
         		

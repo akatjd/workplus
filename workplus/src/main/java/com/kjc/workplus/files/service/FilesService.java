@@ -1,5 +1,9 @@
 package com.kjc.workplus.files.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +25,29 @@ public class FilesService {
 		return filesRepository.save(filesDto.toEntity()).getFilesSeq();
 	}
 	
+//	@Transactional
+//	public FilesDto getFiles(Long filesSeq) {
+//		Files files = filesRepository.findById(filesSeq).get();
+//		
+//		FilesDto filesDto = FilesDto.builder()
+//									.filesSeq(filesSeq)
+//									.originFileName(files.getOriginFileName())
+//									.streFileName(files.getStreFileName())
+//									.fileStreCours(files.getFileStreCours())
+//									.build();
+//		return filesDto;
+//	}
+	
 	@Transactional
-	public FilesDto getFile(Long filesSeq) {
-		Files files = filesRepository.findById(filesSeq).get();
+	public List<FilesDto> getFiles(Long categorySeq) {
 		
-		FilesDto filesDto = FilesDto.builder()
-									.filesSeq(filesSeq)
-									.originFileName(files.getOriginFileName())
-									.streFileName(files.getStreFileName())
-									.fileStreCours(files.getFileStreCours())
-									.build();
-		return filesDto;
+		List<FilesDto> filesList = new ArrayList<FilesDto>();
+		
+		filesList = filesRepository.findFilesByNoticeSeq(categorySeq)
+				.stream()
+				.map(FilesDto::new)
+				.collect(Collectors.toList());
+		
+		return filesList;
 	}
 }

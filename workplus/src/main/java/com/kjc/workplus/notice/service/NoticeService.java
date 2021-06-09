@@ -11,8 +11,6 @@ import com.kjc.workplus.notice.dto.NoticeResponseDto;
 import com.kjc.workplus.notice.dto.NoticeSaveRequestDto;
 import com.kjc.workplus.notice.repository.NoticeRepository;
 
-import lombok.RequiredArgsConstructor;
-
 //@RequiredArgsConstructor
 @Service
 public class NoticeService {
@@ -72,11 +70,13 @@ public class NoticeService {
     @Transactional
     public void update(NoticeSaveRequestDto noticeSaveRequestDto) {
     	
-//    	System.out.println(noticeSaveRequestDto.getSeq());
-//    	System.out.println(noticeSaveRequestDto.getTitle());
-//    	System.out.println(noticeSaveRequestDto.getContent());
-    	
     	noticeRepository.update(noticeSaveRequestDto.getSeq(), noticeSaveRequestDto.getTitle(), noticeSaveRequestDto.getContent());
+    }
+    
+    @Transactional
+    public void updateViewCnt(Long noticeSeq) {
+    	
+    	noticeRepository.updateViewCnt(noticeSeq);
     }
     
     @Transactional
@@ -85,5 +85,8 @@ public class NoticeService {
     	noticeRepository.updateDeleteYn(noticeSeq, "Y");
     }
     
-
+    @Transactional
+    public Long findSeqIncrement() {
+    	return (noticeRepository.findSeqIncrement()+1);
+    }
 }

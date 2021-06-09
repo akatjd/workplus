@@ -18,9 +18,16 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
 	int update(@Param("seq") Long seq, @Param("title") String title,@Param("content") String content);
 	
 	@Modifying
+	@Query("UPDATE Notice notice SET notice.viewCnt = notice.viewCnt + 1 WHERE notice.seq = :seq")
+	int updateViewCnt(@Param("seq") Long seq);
+	
+	@Modifying
 	@Query("UPDATE Notice notice SET notice.deleteYn = :deleteYn WHERE notice.seq = :seq")
 	int updateDeleteYn(@Param("seq") Long seq, @Param("deleteYn") String deleteYn);
 	
 	@Query(value = "SELECT * FROM wp_notice WHERE delete_yn = 'N'", nativeQuery = true)
 	List<Notice> findAllNature();
+	
+	@Query(value = "SELECT COUNT(*) FROM wp_notice;", nativeQuery = true)
+	Long findSeqIncrement();
 }

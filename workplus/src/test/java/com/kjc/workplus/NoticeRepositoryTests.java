@@ -3,9 +3,13 @@ package com.kjc.workplus;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.EntityManager;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kjc.workplus.notice.domain.Notice;
 import com.kjc.workplus.notice.repository.NoticeRepository;
@@ -15,6 +19,9 @@ public class NoticeRepositoryTests {
 	
 	@Autowired
 	private NoticeRepository noticeRepository;
+	
+	@Autowired
+	EntityManager em;
 	
 	@Test
 	public void cleanup() {
@@ -72,6 +79,25 @@ public class NoticeRepositoryTests {
 										.orElseThrow(() -> new IllegalAccessError(" 해당 게시글이 존재하지 않습니다."));
 		
 		System.out.println(notice);
+	}
+	
+	@Test
+	public void findSeqIncrement() {
+		System.out.println(noticeRepository.findSeqIncrement()+1);
+	}
+	
+	@Transactional
+	@Test
+	@Rollback(false)
+	public void viewCntUpdate() {
+		
+		System.out.println(noticeRepository.updateViewCnt(1L));
+	}
+	
+	@Transactional
+	@Test
+	public void update() {
+		System.out.println(noticeRepository.update(1L, "업데이트 테스트", "업데이트 테스트"));
 	}
 
 }

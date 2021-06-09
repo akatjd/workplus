@@ -40,6 +40,14 @@
 				<span th:text="${notice.createdDate}"></span>
 			</td>
 		</tr>
+		<tr>
+			<td>파일</td>
+			<td th:if="${not #lists.isEmpty( fileList )}">
+				<a th:each="row, status : ${fileList}" >
+					[[ ${row.originFileName} ]]<br>
+				</a>
+			</td>
+		</tr>
 	</thead>
 </table>
 

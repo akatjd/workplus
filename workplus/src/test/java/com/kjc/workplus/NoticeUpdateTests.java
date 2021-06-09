@@ -23,4 +23,9 @@ public class NoticeUpdateTests {
 		System.out.println("테스트");
 		noticeRepository.update(1L, "업데이트테스트제목", "업데이트테스트내용");
 	}
+	
+	@Test
+	public void viewCntUpdate() {
+		System.out.println(noticeRepository.updateViewCnt(1L));
+	}
 }

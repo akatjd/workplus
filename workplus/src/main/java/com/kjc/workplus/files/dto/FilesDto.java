@@ -40,6 +40,19 @@ public class FilesDto {
 		this.deleteYn = deleteYn;
 	}
 	
+	@Builder
+	public FilesDto(Files files) {
+		this.filesSeq = files.getFilesSeq();
+		this.category = files.getCategory();
+		this.categorySeq = files.getCategorySeq();
+		this.fileNumber = files.getFileNumber();
+		this.fileStreCours = files.getFileStreCours();
+		this.streFileName = files.getStreFileName();
+		this.originFileName = files.getOriginFileName();
+		this.fileSize = files.getFileSize();
+		this.deleteYn = files.getDeleteYn();
+	}
+	
 	public Files toEntity() {
 		return Files.builder()
 					.category(category)
