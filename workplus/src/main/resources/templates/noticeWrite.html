@@ -38,6 +38,9 @@
 		<input type="hidden" th:field="${noticeResponseDto.seq}" name="seq" id="seq">
 	    제목 : <input type="text" th:field="${noticeResponseDto.title}" name="title" id="title" > <br>
 	    내용 : <input type="text" th:field="${noticeResponseDto.content}" name="content" id="content" > <br>
+	    파일 : <a th:if="${not #lists.isEmpty( fileList )}" th:each="row, status : ${fileList}" >
+					[[ ${row.originFileName} ]]<br>
+			  </a>
 	    첨부할 파일들을 선택하세요 : <input multiple="multiple" type="file" name="file" id="contract_file"/>
 		<div>
 			<a th:href="@{/workplus/notice/list.do}">메인</a>

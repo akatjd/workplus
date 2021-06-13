@@ -25,19 +25,25 @@ public class FilesService {
 		return filesRepository.save(filesDto.toEntity()).getFilesSeq();
 	}
 	
-//	@Transactional
-//	public FilesDto getFiles(Long filesSeq) {
-//		Files files = filesRepository.findById(filesSeq).get();
-//		
-//		FilesDto filesDto = FilesDto.builder()
-//									.filesSeq(filesSeq)
-//									.originFileName(files.getOriginFileName())
-//									.streFileName(files.getStreFileName())
-//									.fileStreCours(files.getFileStreCours())
-//									.build();
-//		return filesDto;
-//	}
+	/**
+	 * 첨부파일 하나의 정보만 가져옴
+	 */
+	@Transactional
+	public FilesDto getFile(Long filesSeq) {
+		Files files = filesRepository.findById(filesSeq).get();
+		
+		FilesDto filesDto = FilesDto.builder()
+									.filesSeq(filesSeq)
+									.originFileName(files.getOriginFileName())
+									.streFileName(files.getStreFileName())
+									.fileStreCours(files.getFileStreCours())
+									.build();
+		return filesDto;
+	}
 	
+	/**
+	 * 여러 첨부파일 정보를 가져옴
+	 */
 	@Transactional
 	public List<FilesDto> getFiles(Long categorySeq) {
 		
@@ -50,4 +56,5 @@ public class FilesService {
 		
 		return filesList;
 	}
+	
 }

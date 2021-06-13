@@ -43,7 +43,7 @@
 		<tr>
 			<td>파일</td>
 			<td th:if="${not #lists.isEmpty( fileList )}">
-				<a th:each="row, status : ${fileList}" >
+				<a th:href="@{'/workplus/notice/download/' + ${row.filesSeq}}" th:each="row, status : ${fileList}" >
 					[[ ${row.originFileName} ]]<br>
 				</a>
 			</td>
