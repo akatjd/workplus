@@ -20,9 +20,28 @@ public class FilesService {
 		this.filesRepository = filesRepository;
 	}
 	
+	/**
+	 * 첨부파일 저장
+	 */
 	@Transactional
 	public Long saveFiles(FilesDto filesDto) {
 		return filesRepository.save(filesDto.toEntity()).getFilesSeq();
+	}
+	
+	/**
+	 * 첨부파일 삭제
+	 */
+	@Transactional
+	public int deleteFile(Long filesSeq) {
+		return filesRepository.deleteFile(filesSeq);
+	}
+	
+	/**
+	 * 카테고리 게시물 첨부파일 갯수 반환
+	 */
+	@Transactional
+	public int findFilesCnt(String category, Long categorySeq) {
+		return filesRepository.findFilesCnt(category, categorySeq);
 	}
 	
 	/**

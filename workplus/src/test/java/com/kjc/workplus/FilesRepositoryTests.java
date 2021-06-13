@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kjc.workplus.files.dto.FilesDto;
 import com.kjc.workplus.files.repository.FilesRepository;
@@ -36,4 +38,21 @@ public class FilesRepositoryTests {
 		
 		System.out.println(files.get(0));
 	}
+	
+	@Transactional
+	@Test
+	@Rollback(false)
+	public void deleteFile() throws Exception{
+		try {
+			filesRepository.deleteFile(1L);
+		}catch(Exception e){
+			e.getStackTrace();
+		}
+	}
+	
+	@Test
+	public void findFileCnt() {
+		System.out.println(filesRepository.findFilesCnt("NOTICE", 13L));
+	}
+	
 }

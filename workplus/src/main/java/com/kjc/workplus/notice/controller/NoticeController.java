@@ -30,7 +30,6 @@ import com.kjc.workplus.files.service.FilesService;
 import com.kjc.workplus.files.utils.MD5Generator;
 import com.kjc.workplus.notice.dto.NoticeResponseDto;
 import com.kjc.workplus.notice.dto.NoticeSaveRequestDto;
-import com.kjc.workplus.notice.repository.NoticeRepository;
 import com.kjc.workplus.notice.service.NoticeService;
 
 import lombok.RequiredArgsConstructor;
@@ -81,7 +80,6 @@ public class NoticeController {
 	public String openNoticeWrite(@RequestParam(value = "noticeSeq", required = false) Long noticeSeq, NoticeSaveRequestDto noticeSaveRequestDto, Model model) {
 		
 		if(noticeSeq == null) {
-			
 			return "noticeWrite";
 		}else {
 			NoticeResponseDto noticeResponseDto = noticeService.findById(noticeSeq);
@@ -169,21 +167,68 @@ public class NoticeController {
         		List<NoticeResponseDto> noticeDtoList = noticeService.findAllNature();
         		
         		model.addAttribute("noticeDtoList", noticeDtoList);
+        		
+        		
     			
     		}catch(Exception e) {
-    			
-    			e.printStackTrace();
-    			
-    		}
+    			e.printStackTrace();	
+    		}  	
     		
     		return "noticeList";
+    		
     	}else {
-    		
-    		noticeService.update(noticeSaveRequestDto);
-    		
-    		NoticeResponseDto noticeResponseDto = noticeService.findById(noticeSaveRequestDto.getSeq());
-
-    		model.addAttribute("noticeResponseDto", noticeResponseDto);
+    		try {
+    			Long noticeSeq = noticeSaveRequestDto.getSeq();
+    			
+    			int totalFileNum = filesService.findFilesCnt("NOTICE", noticeSeq);
+    			
+				FilesDto filesDto = new FilesDto();
+			
+    			for(int i=0; i<files.length; i++) {
+    				String originFileName = files[i].getOriginalFilename();
+    				
+    				if(originFileName != null) {
+    					String streFileName = new MD5Generator(originFileName).toString();
+            			/* 오늘 날짜 */
+            			String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
+            			/* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
+            			String savePath = Paths.get("C:", "workplus", "files", today).toString();
+            			/* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. */
+            			if(!new File(savePath).exists()) {
+            				try {
+            					new File(savePath).mkdir();
+            				}catch(Exception e) {
+            					e.getStackTrace();
+            				}
+            			}
+            			
+            			String fileStreCours = savePath + "\\" + streFileName;
+            			files[i].transferTo(new File(fileStreCours));
+            			
+            			filesDto.setCategorySeq(noticeSeq);
+            			filesDto.setCategory("NOTICE");
+            			filesDto.setFileNumber(totalFileNum+i+1);
+            			filesDto.setOriginFileName(originFileName);
+            			filesDto.setStreFileName(streFileName);
+            			filesDto.setFileStreCours(fileStreCours);
+            			filesDto.setFileSize(Long.valueOf(files[i].getSize()).intValue());
+            			
+                		filesService.saveFiles(filesDto);
+                		
+                		noticeService.update(noticeSaveRequestDto);
+                		
+                		NoticeResponseDto noticeResponseDto = noticeService.findById(noticeSaveRequestDto.getSeq());
+                		model.addAttribute("noticeResponseDto", noticeResponseDto);
+                		
+                		List<FilesDto> fileList = filesService.getFiles(noticeSeq);
+                		model.addAttribute("fileList", fileList);
+                		
+                		
+    				}
+    			}
+    		}catch(Exception e) {
+    			e.printStackTrace();
+    		}
     		
     		return "noticeView";
     	}
@@ -196,8 +241,7 @@ public class NoticeController {
     public String delete(@RequestParam("noticeSeq") Long noticeSeq, Model model) {
  
         noticeService.updateDeleteYn(noticeSeq);
-        
-//      	List<NoticeResponseDto> noticeDtoList = noticeService.findAll();
+       
         List<NoticeResponseDto> noticeDtoList = noticeService.findAllNature();
 		
 		model.addAttribute("noticeDtoList", noticeDtoList);
@@ -208,8 +252,9 @@ public class NoticeController {
     /**
      * 공지사항 첨부파일 다운로드
      */
-    @GetMapping("/download/{fileId}")
+    @GetMapping(value = "/download/{fileId}")
     public ResponseEntity<Resource> fileDownload(@PathVariable("fileId") Long fileId) throws IOException {
+    	
         FilesDto filesDto = filesService.getFile(fileId);
         Path path = Paths.get(filesDto.getFileStreCours());
         Resource resource = new InputStreamResource(Files.newInputStream(path));
@@ -220,19 +265,12 @@ public class NoticeController {
         StringBuffer sb = new StringBuffer();
 
         for (int i = 0; i < originFileName.length(); i++) {
-
                char c = originFileName.charAt(i);
-
                if (c > '~') {
-
                      sb.append(URLEncoder.encode("" + c, "UTF-8"));
-
                } else {
-
                      sb.append(c);
-
                }
-
         }
 
         encodedFilename = sb.toString();
@@ -241,5 +279,19 @@ public class NoticeController {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFilename + "\"")
                 .body(resource);
+    }
+    
+    @GetMapping(value = "/deleteFile.do")
+    public String deleteFile(@RequestParam("filesSeq") Long filesSeq, @RequestParam("noticeSeq") Long noticeSeq, Model model) {
+    	
+    	filesService.deleteFile(filesSeq);
+    	
+    	NoticeResponseDto noticeResponseDto = noticeService.findById(noticeSeq);
+		model.addAttribute("noticeResponseDto", noticeResponseDto);
+		
+		List<FilesDto> fileList = filesService.getFiles(noticeSeq);
+		model.addAttribute("fileList", fileList);
+    	
+    	return "noticeWrite";
     }
 }

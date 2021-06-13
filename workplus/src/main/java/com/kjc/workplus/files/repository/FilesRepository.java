@@ -13,6 +13,13 @@ import com.kjc.workplus.files.domain.Files;
 @Repository
 public interface FilesRepository extends JpaRepository<Files, Long> {
 	
-	@Query("SELECT files FROM Files as files WHERE files.category = 'NOTICE' and files.categorySeq = :categorySeq ")
+	@Query("SELECT files FROM Files as files WHERE files.category = 'NOTICE' and files.categorySeq = :categorySeq and files.deleteYn = 'N' ")
 	List<Files> findFilesByNoticeSeq(@Param("categorySeq") Long categorySeq);
+	
+	@Modifying
+	@Query("UPDATE Files files SET files.deleteYn = 'Y' WHERE files.filesSeq = :filesSeq")
+	int deleteFile(@Param("filesSeq") Long filesSeq);
+	
+	@Query("SELECT COUNT(fileNumber) FROM Files files WHERE files.category = :category and files.categorySeq = :categorySeq")
+	int findFilesCnt(@Param("category") String category, @Param("categorySeq") Long categorySeq);
 }
