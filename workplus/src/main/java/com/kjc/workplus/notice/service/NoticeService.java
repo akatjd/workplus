@@ -3,6 +3,10 @@ package com.kjc.workplus.notice.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +26,7 @@ public class NoticeService {
 	}
 	
 	/**
-	 * 공지사항 목록 조회
+	 * 공지사항 목록 조회 (전체 리스트 한페이지에)
 	 */
 	@Transactional(readOnly = true)
 	public List<NoticeResponseDto> findAllNature() {
@@ -31,6 +35,14 @@ public class NoticeService {
 								.stream()
 								.map(NoticeResponseDto::new)
 								.collect(Collectors.toList());
+	}
+	
+	public Page<Notice> getNoticeList(Pageable pageable) {
+		
+		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
+        pageable = PageRequest.of(page, 10, Sort.Direction.ASC, "seq"); // Sort 추가
+
+        return noticeRepository.findAll(pageable);
 	}
 	
 	/**

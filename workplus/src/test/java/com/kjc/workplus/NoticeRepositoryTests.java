@@ -2,12 +2,17 @@ package com.kjc.workplus;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +45,7 @@ public class NoticeRepositoryTests {
 		String title = "테스트 게시글";
 		String content = "테스트 본문";
 		
-		for(int i=0; i<10; i++) {
+		for(int i=0; i<50; i++) {
 			noticeRepository.save(Notice.builder()
 					.title(title + Integer.toString(i))
 					.content(content + Integer.toString(i))
@@ -99,5 +104,19 @@ public class NoticeRepositoryTests {
 	public void update() {
 		System.out.println(noticeRepository.update(1L, "업데이트 테스트", "업데이트 테스트"));
 	}
+	
+	@Test
+    public void testSeqPagingSort() {
+        Pageable paging = PageRequest.of(0, 10, Sort.Direction.ASC, "seq");
+
+        Page<Notice> result = noticeRepository.findBySeqGreaterThan(0L, paging);
+        System.out.println("PAGE SIZE : " + result.getSize());
+        System.out.println("TOTAL PAGES : " + result.getTotalPages());
+        System.out.println("TOTAL COUNT : " + result.getTotalElements());
+        System.out.println("NEXT : " + result.nextPageable());
+
+        List<Notice> list = result.getContent();
+        list.forEach(System.out::println);
+    }
 
 }

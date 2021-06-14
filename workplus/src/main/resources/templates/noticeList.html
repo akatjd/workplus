@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="board/layout/basic">
 <head>
+<meta charset="UTF-8">
 <title>일더하기 Work+</title>
-
+<link rel="stylesheet" href="/webjars/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
 <body>
 
@@ -17,7 +18,7 @@
 			<th>작성자</th>
 			<th>작성일자</th>
 		</tr>
-		<tr th:each="notice : ${noticeDtoList}">
+		<tr th:each="notice:${noticeDtoList}">
 			<td>
 				<span th:text="${notice.seq}"></span>
 			</td>
@@ -40,10 +41,42 @@
 	</tbody>
 </table>
 
+<nav>
+	<div th:with="start=${T(Math).floor(noticeDtoList.number/10)*10 + 1},
+                    last=(${start + 9 < noticeDtoList.totalPages ? start + 9 : noticeDtoList.totalPages})">
+        <div>
+		    <a th:href="@{list1.do(page=1)}" aria-label="First">
+		        <span aria-hidden="true">First</span>
+		    </a>
+		</div>
+		
+		<div th:class="${noticeDtoList.first} ? 'disabled'">
+		    <a th:href="${noticeDtoList.first} ? '#' :@{list1.do(page=${noticeDtoList.number})}" aria-label="Previous">
+		        <span aria-hidden="true">&lt;</span>
+		    </a>
+		</div>
+		
+		<div th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == noticeDtoList.number + 1} ? 'active'">
+		    <a th:text="${page}" th:href="@{list1.do(page=${page})}"></a>
+		</div>
+		
+		<div th:class="${noticeDtoList.last} ? 'disabled'">
+		    <a th:href="${noticeDtoList.last} ? '#' : @{list1.do(page=${noticeDtoList.number + 2})}" aria-label="Next">
+		        <span aria-hidden="true">&gt;</span>
+		    </a>
+	    </div>
+	
+		<div>
+		    <a th:href="@{list1.do(page=${noticeDtoList.totalPages})}" aria-label="Last">
+		        <span aria-hidden="true">Last</span>
+		    </a>
+	    </div>
+	</div>
+</nav>
+
 <div>
 	<button onclick="location.href='/workplus/notice/write.do'">글작성</button>
 </div>
-
 
 </body>
 

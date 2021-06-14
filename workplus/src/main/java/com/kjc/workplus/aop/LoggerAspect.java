@@ -23,7 +23,7 @@ public class LoggerAspect {
 			type = "Controller ===> ";
 
 		} else if (name.contains("Service") == true) {
-			type = "ServiceImpl ===> ";
+			type = "Service ===> ";
 
 		}
 		

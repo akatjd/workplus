@@ -12,6 +12,9 @@ import java.util.List;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +31,16 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kjc.workplus.files.dto.FilesDto;
 import com.kjc.workplus.files.service.FilesService;
 import com.kjc.workplus.files.utils.MD5Generator;
+import com.kjc.workplus.notice.domain.Notice;
 import com.kjc.workplus.notice.dto.NoticeResponseDto;
 import com.kjc.workplus.notice.dto.NoticeSaveRequestDto;
+import com.kjc.workplus.notice.repository.NoticeRepository;
 import com.kjc.workplus.notice.service.NoticeService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/workplus/notice")
 @Controller
@@ -45,12 +52,25 @@ public class NoticeController {
 	/**
 	 * 공지사항 리스트 확인
 	 */
-	@RequestMapping(value = "/list.do", method = RequestMethod.GET)
+	@GetMapping(value = "/list.do")
 	public String openNoticeList(Model model) {
 		
 		List<NoticeResponseDto> noticeDtoList = noticeService.findAllNature();
 		
 		model.addAttribute("noticeDtoList", noticeDtoList);
+		
+		return "noticeList";
+	}
+	
+	@GetMapping(value = "/list1.do")
+	public String paging(@PageableDefault Pageable pageRequest, Model model) {
+		
+		Page<Notice> noticeDtoList = noticeService.getNoticeList(pageRequest);
+		model.addAttribute("noticeDtoList", noticeDtoList);
+		
+		log.debug("총 element 수 : {}, 전체 page 수 : {}, 페이지에 표시할 element 수 : {}, 현재 페이지 index : {}, 현재 페이지의 element 수 : {}",
+				noticeDtoList.getTotalElements(), noticeDtoList.getTotalPages(), noticeDtoList.getSize(),
+				noticeDtoList.getNumber(), noticeDtoList.getNumberOfElements());
 		
 		return "noticeList";
 	}
