@@ -25,9 +25,6 @@ public class NoticeRepositoryTests {
 	@Autowired
 	private NoticeRepository noticeRepository;
 	
-	@Autowired
-	EntityManager em;
-	
 	@Test
 	public void cleanup() {
 		noticeRepository.deleteAll();
