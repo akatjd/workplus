@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +33,6 @@ import com.kjc.workplus.files.utils.MD5Generator;
 import com.kjc.workplus.notice.domain.Notice;
 import com.kjc.workplus.notice.dto.NoticeResponseDto;
 import com.kjc.workplus.notice.dto.NoticeSaveRequestDto;
-import com.kjc.workplus.notice.repository.NoticeRepository;
 import com.kjc.workplus.notice.service.NoticeService;
 
 import lombok.RequiredArgsConstructor;
@@ -49,20 +47,23 @@ public class NoticeController {
 	private final FilesService filesService;
 	private final NoticeService noticeService;
 	
+//	/**
+//	 * 공지사항 리스트 확인
+//	 */
+//	@GetMapping(value = "/list.do")
+//	public String openNoticeList(Model model) {
+//		
+//		List<NoticeResponseDto> noticeDtoList = noticeService.findAllNature();
+//		
+//		model.addAttribute("noticeDtoList", noticeDtoList);
+//		
+//		return "noticeList";
+//	}
+	
 	/**
 	 * 공지사항 리스트 확인
 	 */
 	@GetMapping(value = "/list.do")
-	public String openNoticeList(Model model) {
-		
-		List<NoticeResponseDto> noticeDtoList = noticeService.findAllNature();
-		
-		model.addAttribute("noticeDtoList", noticeDtoList);
-		
-		return "noticeList";
-	}
-	
-	@GetMapping(value = "/list1.do")
 	public String paging(@PageableDefault Pageable pageRequest, Model model) {
 		
 		Page<Notice> noticeDtoList = noticeService.getNoticeList(pageRequest);

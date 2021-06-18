@@ -29,6 +29,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	runtimeOnly 'mysql:mysql-connector-java'
+	compile 'org.webjars:bootstrap:5.0.1' // 부트스트랩  
+    compile("org.springframework.boot:spring-boot-starter-security") // Spring Security
 }
 
 test {

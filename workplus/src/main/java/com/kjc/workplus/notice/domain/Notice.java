@@ -57,6 +57,7 @@ public class Notice {
 	@Builder
 	public Notice(String title, String content, Long viewCnt, String writer, 
 			LocalDateTime createdDate, String deleteYn, String updatedId, LocalDateTime updatedDate, String fileId) {
+		
 		this.title = title;
 		this.content = content;
 		this.viewCnt = viewCnt;
@@ -66,6 +67,7 @@ public class Notice {
 		this.updatedId = updatedId;
 		this.updatedDate = updatedDate;
 		this.fileId = fileId;
+		
 	}
 	
 //	public void update(String title, String content) {

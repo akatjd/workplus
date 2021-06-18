@@ -15,7 +15,6 @@ import com.kjc.workplus.notice.dto.NoticeResponseDto;
 import com.kjc.workplus.notice.dto.NoticeSaveRequestDto;
 import com.kjc.workplus.notice.repository.NoticeRepository;
 
-//@RequiredArgsConstructor
 @Service
 public class NoticeService {
 	
