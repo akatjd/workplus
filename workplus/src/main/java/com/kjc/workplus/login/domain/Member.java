@@ -9,9 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor // 클래스에 존재하는 모든 필드에 대한 생성자를 자동으로 생성해줌
+@NoArgsConstructor // 파라미터가 없는 생성자를 생성함
 @Getter
 @Entity
 @Table(name = "wp_member")
@@ -29,7 +33,7 @@ public class Member {
 	@Column(name = "nickname", length = 20, nullable = true)
 	private String nickname;
 	
-	@Column(name = "password", length = 45, nullable = true)
+	@Column(name = "password", length = 100, nullable = true)
 	private String password;
 	
 	@Column(name = "photo", length = 200, nullable = true)
@@ -44,7 +48,7 @@ public class Member {
 	@Column(name = "reg_date")
 	private LocalDateTime regDate;
 	
-	@Column(name = "updated_id", length = 200)
+	@Column(name = "updated_id", length = 200, nullable = true)
 	private String updatedId;
 	
 	@Column(name = "updated_date")

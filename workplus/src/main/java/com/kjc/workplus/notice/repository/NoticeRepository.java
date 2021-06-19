@@ -36,4 +36,5 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
 	Page<Notice> findAll(Pageable pageable);
 	
 	Page<Notice> findBySeqGreaterThan(Long seq, Pageable paging);
+	
 }

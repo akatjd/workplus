@@ -56,6 +56,7 @@ public class Files {
 	@Builder
 	public Files(String category, Long categorySeq, int fileNumber, String fileStreCours,
 			 String streFileName, String originFileName, LocalDateTime regDate, int fileSize, String deleteYn) {
+		
 		this.category = category;
 		this.categorySeq = categorySeq;
 		this.fileNumber = fileNumber;
@@ -65,5 +66,6 @@ public class Files {
 		this.regDate = regDate;
 		this.fileSize = fileSize;
 		this.deleteYn = deleteYn;
+		
 	}
 }

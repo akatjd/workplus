@@ -15,6 +15,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class FilesDto {
+	
 	private Long filesSeq;
 	private String category;
 	private Long categorySeq;
@@ -29,6 +30,7 @@ public class FilesDto {
 	@Builder
 	public FilesDto(Long filesSeq, String category, Long categorySeq, int fileNumber, String fileStreCours,
 			String streFileName, String originFileName, int fileSize, String deleteYn) {
+		
 		this.filesSeq = filesSeq;
 		this.category = category;
 		this.categorySeq = categorySeq;
@@ -38,10 +40,12 @@ public class FilesDto {
 		this.originFileName = originFileName;
 		this.fileSize = fileSize;
 		this.deleteYn = deleteYn;
+		
 	}
 	
 	@Builder
 	public FilesDto(Files files) {
+		
 		this.filesSeq = files.getFilesSeq();
 		this.category = files.getCategory();
 		this.categorySeq = files.getCategorySeq();
@@ -51,9 +55,11 @@ public class FilesDto {
 		this.originFileName = files.getOriginFileName();
 		this.fileSize = files.getFileSize();
 		this.deleteYn = files.getDeleteYn();
+		
 	}
 	
 	public Files toEntity() {
+		
 		return Files.builder()
 					.category(category)
 					.categorySeq(categorySeq)
@@ -65,5 +71,6 @@ public class FilesDto {
 					.fileSize(fileSize)
 					.deleteYn("N")
 					.build();
+		
 	}
 }
