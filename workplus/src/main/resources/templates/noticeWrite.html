@@ -1,65 +1,88 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="board/layout/basic">
-
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	  xmlns:sec="http://www.w3.org/1999/xhtml"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  layout:decorator="board/layout/basic"
+	  layout:decorate="~{layout/default_layout}">
+	  
 <head>
-
+	<meta charset="UTF-8">
 	<title>일더하기 Work+</title>
-
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+	<th:block layout:fragment="head">
+		<!--/* css */-->
+		<link th:href="@{/css/common.css}" rel="stylesheet" />
+	</th:block>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script>
+	
+	    $(document).ready( function() {
+	 
+	        $("input[type=file]").change(function () {
+	            
+	            var fileInput = document.getElementById("contract_file");
+	            
+	            var files = fileInput.files;
+	            var file;
+	            
+	            for (var i = 0; i < files.length; i++) {
+	                
+	                file = files[i];
+	
+	                alert(file.name);
+	            }
+	            
+	        });
+	 
+	    });
+	     
+	</script>
 </head>
-  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-  <script>
-    $(document).ready( function() {
- 
-        $("input[type=file]").change(function () {
-            
-            var fileInput = document.getElementById("contract_file");
-            
-            var files = fileInput.files;
-            var file;
-            
-            for (var i = 0; i < files.length; i++) {
-                
-                file = files[i];
-
-                alert(file.name);
-            }
-            
-        });
- 
-    });
-     
-  </script>
 
 <body>
 
-	<h1>공지사항 글쓰기</h1>
+	<th:block layout:fragment="header" th:include="@{/fragments/header}">
+			<h1>Home Page</h1>
+	        <hr>
+	        <a sec:authorize="isAnonymous()" th:href="@{/workplus/login}">로그인</a>
+	        <a sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+	        <a sec:authorize="isAnonymous()" th:href="@{/workplus/signup}">회원가입</a>
+	        <a sec:authorize="hasRole('ROLE_MEMBER')" th:href="@{/workplus/member/info}">내정보</a>
+			<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/workplus/admin}">어드민</a>
+	</th:block>
 	
-	<form th:if="${noticeResponseDto!=null}" th:object="${noticeSaveRequestDto}" th:action="@{/workplus/notice/register.do}" method="post" id="frm" enctype="multipart/form-data">
-		<input type="hidden" th:field="${noticeResponseDto.seq}" name="seq" id="seq">
-	    제목 : <input type="text" th:field="${noticeResponseDto.title}" name="title" id="title" > <br>
-	    내용 : <input type="text" th:field="${noticeResponseDto.content}" name="content" id="content" > <br>
-	    파일 : 
-	    <div th:if="${not #lists.isEmpty( fileList )}" th:each="row, status : ${fileList}">
-	    	  <a>[[ ${row.originFileName} ]]</a>
-			  <a th:href="@{/workplus/notice/deleteFile.do(filesSeq=${row.filesSeq}, noticeSeq=${row.categorySeq})}">파일삭제</a><br>
-		</div>	  
-	    첨부할 파일들을 선택하세요 : <input multiple="multiple" type="file" name="file" id="contract_file"/>
-		<div>
-			<a th:href="@{/workplus/notice/list.do}">메인</a>
-			<a href="#" onclick="document.getElementById('frm').submit();">전송</a>
-		</div>
-	</form>
-	
-	<form th:unless="${noticeResponseDto!=null}" th:object="${noticeSaveRequestDto}" th:action="@{/workplus/notice/register.do}" method="post" id="frm" enctype="multipart/form-data">	
-	    제목 : <input type="text" th:field="*{title}" name="title" id="title"> <br>
-	    내용 : <input type="text" th:field="*{content}" name="content" id="content"> <br>
-		첨부할 파일들을 선택하세요 : <input multiple="multiple" type="file" name="file" id="contract_file"/>
-		<div>
-			<a th:href="@{/workplus/notice/list.do}">메인</a>
-			<a href="#" onclick="document.getElementById('frm').submit();">전송</a>
-		</div>
-	</form>
-	
+	<div layout:fragment="content" class="content">
+		<h1>공지사항 글쓰기</h1>
+		
+		<form th:if="${noticeResponseDto!=null}" th:object="${noticeSaveRequestDto}" th:action="@{/workplus/notice/register.do}" method="post" id="frm" enctype="multipart/form-data">
+			<input type="hidden" th:field="${noticeResponseDto.seq}" name="seq" id="seq">
+		    제목 : <input type="text" th:field="${noticeResponseDto.title}" name="title" id="title" > <br>
+		    내용 : <input type="text" th:field="${noticeResponseDto.content}" name="content" id="content" > <br>
+		    파일 : 
+		    <div th:if="${not #lists.isEmpty( fileList )}" th:each="row, status : ${fileList}">
+		    	  <a>[[ ${row.originFileName} ]]</a>
+				  <a th:href="@{/workplus/notice/deleteFile.do(filesSeq=${row.filesSeq}, noticeSeq=${row.categorySeq})}">파일삭제</a><br>
+			</div>	  
+		    첨부할 파일들을 선택하세요 : <input multiple="multiple" type="file" name="file" id="contract_file"/>
+			<div>
+				<a th:href="@{/workplus/notice/list.do}">메인</a>
+				<a href="#" onclick="document.getElementById('frm').submit();">전송</a>
+			</div>
+		</form>
+		
+		<form th:unless="${noticeResponseDto!=null}" th:object="${noticeSaveRequestDto}" th:action="@{/workplus/notice/register.do}" method="post" id="frm" enctype="multipart/form-data">	
+		    제목 : <input type="text" th:field="*{title}" name="title" id="title"> <br>
+		    내용 : <input type="text" th:field="*{content}" name="content" id="content"> <br>
+			첨부할 파일들을 선택하세요 : <input multiple="multiple" type="file" name="file" id="contract_file"/>
+			<div>
+				<a th:href="@{/workplus/notice/list.do}">메인</a>
+				<a href="#" onclick="document.getElementById('frm').submit();">전송</a>
+			</div>
+		</form>	
+	</div>
+			
+	<th:block layout:fragment="footer" th:include="@{/fragments/footer}"></th:block>
 
 </body>
 

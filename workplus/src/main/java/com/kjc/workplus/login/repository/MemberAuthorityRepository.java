@@ -7,5 +7,7 @@ import com.kjc.workplus.login.domain.MemberAuthority;
 
 @Repository
 public interface MemberAuthorityRepository extends JpaRepository<MemberAuthority, Long>{
+	
+	MemberAuthority findByMemberId(String memberId);
 
 }

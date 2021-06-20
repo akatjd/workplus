@@ -67,4 +67,14 @@ public class LoginTest {
 				.build());
 		
 	}
+	
+	@Test
+	public void adminAuthorityInsertTest() {
+
+		memberAuthorityRepository.save(MemberAuthority.builder()
+				 .memberId("admin01")
+				 .authorityName("ROLE_ADMIN")
+				 .build());			
+		
+	}
 }

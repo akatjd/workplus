@@ -1,59 +1,87 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="board/layout/basic">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	  xmlns:sec="http://www.w3.org/1999/xhtml"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  layout:decorator="board/layout/basic"
+	  layout:decorate="~{layout/default_layout}">
+	  
 <head>
-<title>일더하기 Work+</title>
-
+	<meta charset="UTF-8">
+	<title>일더하기 Work+</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+	<script src="/webjars/bootstrap/3.3.4/dist/js/bootstrap.min.js"></script>
+	<th:block layout:fragment="head">
+		<!--/* css */-->
+		<link th:href="@{/css/common.css}" rel="stylesheet" />
+	</th:block>
 </head>
+
 <body>
-
-<h1>공지사항 상세페이지</h1>
-
-<table th:each="notice : ${noticeResponseDto}" border="1" width ="500" height="300" >
-	<thead>
-		<tr>
-			<td>공지번호</td>
-			<td>
-				<span th:text="${notice.seq}"></span>
-			</td>
-		</tr>
-		<tr>
-			<td>제목</td>
-			<td>
-				<span th:text="${notice.title}"></span>
-			</td>
-		</tr>
-		<tr>
-			<td>내용</td>
-			<td>
-				<span th:text="${notice.content}"></span>
-			</td>
-		</tr>
-		<tr>
-			<td>작성자</td>
-			<td>
-				<span th:text="${notice.writer}"></span>
-			</td>
-		</tr>
-		<tr>
-			<td>작성일자</td>
-			<td>
-				<span th:text="${notice.createdDate}"></span>
-			</td>
-		</tr>
-		<tr>
-			<td>파일</td>
-			<td th:if="${not #lists.isEmpty( fileList )}">
-				<a th:href="@{'/workplus/notice/download/' + ${row.filesSeq}}" th:each="row, status : ${fileList}" >
-					[[ ${row.originFileName} ]]<br>
-				</a>
-			</td>
-		</tr>
-	</thead>
-</table>
-
-<a th:href="@{/workplus/notice/list.do}">메인</a>
-<a th:href="@{/workplus/notice/delete.do(noticeSeq=${noticeResponseDto.seq})}">삭제</a>
-<a th:href="@{/workplus/notice/write.do(noticeSeq=${noticeResponseDto.seq})}">수정</a>
+	
+	<th:block layout:fragment="header" th:include="@{/fragments/header}">
+			<h1>Home Page</h1>
+	        <hr>
+	        <a sec:authorize="isAnonymous()" th:href="@{/workplus/login}">로그인</a>
+	        <a sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+	        <a sec:authorize="isAnonymous()" th:href="@{/workplus/signup}">회원가입</a>
+	        <a sec:authorize="hasRole('ROLE_MEMBER')" th:href="@{/workplus/member/info}">내정보</a>
+			<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/workplus/admin}">어드민</a>
+	</th:block>
+	
+	<div layout:fragment="content" class="content">
+		<h1>공지사항 상세페이지</h1>
+		
+		<table th:each="notice : ${noticeResponseDto}" border="1" width ="500" height="300" >
+			<thead>
+				<tr>
+					<td>공지번호</td>
+					<td>
+						<span th:text="${notice.seq}"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>제목</td>
+					<td>
+						<span th:text="${notice.title}"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>내용</td>
+					<td>
+						<span th:text="${notice.content}"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>작성자</td>
+					<td>
+						<span th:text="${notice.writer}"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>작성일자</td>
+					<td>
+						<span th:text="${notice.createdDate}"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>파일</td>
+					<td th:if="${not #lists.isEmpty( fileList )}">
+						<a th:href="@{'/workplus/notice/download/' + ${row.filesSeq}}" th:each="row, status : ${fileList}" >
+							[[ ${row.originFileName} ]]<br>
+						</a>
+					</td>
+				</tr>
+			</thead>
+		</table>
+		
+		<a th:href="@{/workplus/notice/list.do}">메인</a>
+		<a th:href="@{/workplus/notice/delete.do(noticeSeq=${noticeResponseDto.seq})}">삭제</a>
+		<a th:href="@{/workplus/notice/write.do(noticeSeq=${noticeResponseDto.seq})}">수정</a>
+		
+	</div>
+	
+	<th:block layout:fragment="footer" th:include="@{/fragments/footer}"></th:block> 
 
 </body>
 

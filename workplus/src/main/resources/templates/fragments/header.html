@@ -1,0 +1,17 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.w3.org/1999/xhtml"> 
+
+	<div class="header">
+		<h2>일더하기 Work+</h2> 
+		<a sec:authorize="isAnonymous()" th:href="@{/workplus/notice/list.do}">공지사항</a>
+		<a sec:authorize="isAnonymous()" >FAQ</a>
+		<a sec:authorize="isAnonymous()" >상품목록</a>
+		<a sec:authorize="isAnonymous()" th:href="@{/workplus/login.do}" style="float:right">로그인</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/logout}" style="float:right">로그아웃</a>
+        <a sec:authorize="isAnonymous()" th:href="@{/workplus/signup.do}" style="float:right">회원가입</a>
+        <a sec:authorize="hasRole('ROLE_MEMBER')" th:href="@{/workplus/member/info.do}" style="float:right">내정보</a>
+		<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/workplus/admin.do}" style="float:right">어드민</a>
+	</div>
+
+</html>

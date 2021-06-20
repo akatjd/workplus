@@ -2,7 +2,6 @@ package com.kjc.workplus.login.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -19,7 +18,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kjc.workplus.login.domain.Member;
+import com.kjc.workplus.login.domain.MemberAuthority;
 import com.kjc.workplus.login.dto.MemberDto;
+import com.kjc.workplus.login.repository.MemberAuthorityRepository;
 import com.kjc.workplus.login.repository.MemberRepository;
 
 @Service
@@ -27,6 +28,9 @@ public class MemberService implements UserDetailsService {
 	
 	@Autowired
 	MemberRepository memberRepository;
+	
+	@Autowired
+	MemberAuthorityRepository memberAuthorityRepository;
 	
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
@@ -37,6 +41,10 @@ public class MemberService implements UserDetailsService {
 		
 		Member member = memberRepository.findMemberByMemberId(username);
 		
+		MemberAuthority memberAuthority = memberAuthorityRepository.findByMemberId(username);
+		
+		log.info("authority.getAuthorityName() : " + memberAuthority.getAuthorityName());
+		
 		if(member == null) {
 			
 			log.debug("== 계정정보가 존재하지 않음 ==");
@@ -45,19 +53,19 @@ public class MemberService implements UserDetailsService {
 		}
 		
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		SimpleGrantedAuthority sg = new SimpleGrantedAuthority("ROLE_MEMBER");
+		SimpleGrantedAuthority sg = new SimpleGrantedAuthority(memberAuthority.getAuthorityName());
 		authorities.add(sg);
 		
-		System.out.println(member.getMemberId());
-		System.out.println(member.getPassword());
-		System.out.println(authorities);
+		User user = new User(member.getMemberId(), member.getPassword(), authorities);
 		
-		return new User(member.getMemberId(), member.getPassword(), authorities);
+		System.out.println(user);
+
+		return user;
 		
 	}
 	
 	@Transactional
-	public Long save(MemberDto memberDto) {
+	public void save(MemberDto memberDto) {
 		
 		//비밀번호 암호화
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -66,10 +74,20 @@ public class MemberService implements UserDetailsService {
 		memberDto.setPhoto("test");
 		memberDto.setUpdatedId("admin");
 		
+		memberAuthorityRepository.save(MemberAuthority.builder()
+								 .memberId(memberDto.getMemberId())
+								 .authorityName("ROLE_MEMBER")
+								 .build());												
+		
 		Member member = memberDto.toEntity();
 
-//		memberRepository.updatePassword(passwordEncoded, member.getMemberId()); // 암호화된 비밀번호 업데이트
-		
-		return memberRepository.save(member).getMemberSeq();
+		memberRepository.save(member).getMemberSeq();
 	}
+	
+	@Transactional
+    public Long findSeqIncrement() {
+		
+    	return (memberRepository.findSeqIncrement()+1);
+    	
+    }
 }

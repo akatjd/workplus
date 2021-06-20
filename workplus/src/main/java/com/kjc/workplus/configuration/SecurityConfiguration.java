@@ -3,7 +3,6 @@ package com.kjc.workplus.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -13,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.kjc.workplus.login.handler.LoginFailHandler;
 import com.kjc.workplus.login.service.MemberService;
 
 @Configuration
@@ -22,6 +22,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private MemberService memberService;
 	
+	@Autowired
+	private LoginFailHandler loginFailHandler;
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		
@@ -68,17 +71,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		        .antMatchers("/workplus/**").permitAll();
 
 		http.formLogin()
-		        .loginPage("/login")
-		        .defaultSuccessUrl("/workplus/")
+		        .loginPage("/workplus/login.do")
+		        .defaultSuccessUrl("/workplus/main.do")
+		        .failureHandler(loginFailHandler)
 		        .permitAll();
 		
 		http.logout()
 		        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-		        .logoutSuccessUrl("/workplus/")
+		        .logoutSuccessUrl("/workplus/main.do")
 		        .invalidateHttpSession(true);
 		
 		http.exceptionHandling()
-		        .accessDeniedPage("/workplus/denied");
+		        .accessDeniedPage("/workplus/denied.do");
 		
 	}
 	

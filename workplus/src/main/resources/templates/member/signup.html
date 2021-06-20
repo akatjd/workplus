@@ -3,16 +3,43 @@
     <head>
         <meta charset="UTF-8">
         <title>회원가입 페이지</title>
+        <script>
+	        function check_pw(){  //비밀번호 확인 
+	            var p = document.getElementById('pw').value; 
+	            var p_cf = document.getElementById('pw_cf').value; 
+	         
+	            if (p!=p_cf) { 
+	              document.getElementById('pw_check_msg').innerHTML = "비밀번호가 다릅니다. 다시 확인해 주세요."; 
+	            } 
+	            else { 
+	                document.getElementById('pw_check_msg').innerHTML = ""; 
+	            } 
+	            if (p_cf=="") { 
+	              document.getElementById('pw_check_msg').innerHTML = ""; 
+	            } 
+	        }
+        </script>
     </head>
     <body>
         <h1>회원 가입</h1>
         <hr>
 
-        <form th:action="@{/workplus/signup}" method="post">
-            <input type="text" name="memberId" placeholder="account 입력">
-            <input type="text" name="nickname" placeholder="nickname 입력">
-            <input type="password" name="password" placeholder="password 입력">
-            <input type="text" name="hphone" placeholder="hphone 입력">
+        <form th:action="@{/workplus/signup.do}" method="post" enctype="multipart/form-data"><br>
+        	아이디<br>
+        	<!--PATTER으로 메일 유효성 검사 -->
+            <input type="email" name="memberId" value="" size="20" placeholder="이메일 아이디 입력" pattern="[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}" required> 예) id@domain.com <br>
+            닉네임<br>
+            <input type="text" name="nickname" placeholder="nickname 입력"><br>
+            패스워드<br>
+            <!--patter으로 비밀번호 유효성 검사 minlength와 maxlength로 글자 수 제한-->
+            <input type="password" name="password" placeholder="password 입력" value="" minlength="4" maxlength="12" size="15" pattern="[a-zA-Z0-9]{4,12}" title="4~12자의 영문 대소문자와 숫자로만 입력."required/><br>
+            패스워드 확인<br>
+            <input type="password" id="pw_cf" name="my_password_confirm" placeholder="password 재입력" onkeyup="check_pw()" value="" maxlength="12" size="15" required> 
+            <span id="pw_check_msg"></span><br>
+            핸드폰<br>
+            <input type="text" name="hphone" placeholder="hphone 입력"><br>
+            프로필사진<br>
+            <input type="file" name="file" placeholder="프로필사진 등록"><br>
             <button type="submit">가입하기</button>
         </form>
     </body>

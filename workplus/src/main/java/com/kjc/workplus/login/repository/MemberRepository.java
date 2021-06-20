@@ -1,7 +1,5 @@
 package com.kjc.workplus.login.repository;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,5 +19,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	@Modifying
 	@Query("UPDATE Member members SET members.password = :password WHERE members.memberId = :memberId")
 	int updatePassword(@Param("password") String password, @Param("memberId") String memberId);
+	
+	@Query(value = "SELECT COUNT(*) FROM wp_member;", nativeQuery = true)
+	Long findSeqIncrement();
 	
 }

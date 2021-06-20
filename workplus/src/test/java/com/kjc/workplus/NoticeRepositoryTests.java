@@ -35,7 +35,7 @@ public class NoticeRepositoryTests {
 	}
 	
 	/**
-	 * 공지사항 wp_notice 테스트 데이터 삽입 (10개)
+	 * 공지사항 wp_notice 테스트 데이터 삽입 (50개)
 	 */
 	@Test
 	public void noticeTest() {

@@ -1,68 +1,95 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="board/layout/basic">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	  xmlns:sec="http://www.w3.org/1999/xhtml"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  layout:decorator="board/layout/basic"
+	  layout:decorate="~{layout/default_layout}">
+	  
 <head>
-<meta charset="UTF-8">
-<title>일더하기 Work+</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-<script src="/webjars/bootstrap/3.3.4/dist/js/bootstrap.min.js"></script>
+	<meta charset="UTF-8">
+	<title>일더하기 Work+</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+	<script src="/webjars/bootstrap/3.3.4/dist/js/bootstrap.min.js"></script>
+	<th:block layout:fragment="head">
+		<!--/* css */-->
+		<link th:href="@{/css/common.css}" rel="stylesheet" />
+	</th:block>
 </head>
+
 <body>
 
-<h1>공지사항</h1>
-
-<table class="table table-striped">
-	<thead>
-	    <tr>
-	      <th scope="col">번호</th>
-	      <th scope="col">제목</th>
-	      <th scope="col">조회수</th>
-	      <th scope="col">작성자</th>
-	      <th scope="col">작성일자</th>
-	    </tr>
-	  </thead>
-	  <tbody>
-	    <tr th:each="notice:${noticeDtoList}">
-			<td>
-				<span th:text="${notice.seq}"></span>
-			</td>
-			<td>
-				<a th:href="|@{/workplus/notice/view.do}?noticeSeq=${notice.seq}|" th:text="${notice.title}"></a>
-			</td>
-			<td>
-				<span th:text="${notice.viewCnt}"></span>
-			</td>
-			<td>
-				<span th:text="${notice.writer}"></span>
-			</td>
-			<td>
-				<span th:text="${notice.createdDate}"></span>
-			</td>
-		</tr>
- 	</tbody>
-</table>
- 
- <nav>
-	<div th:with="start=${T(Math).floor(noticeDtoList.number/10)*10 + 1},
-                    last=(${start + 9 < noticeDtoList.totalPages ? start + 9 : noticeDtoList.totalPages})">
-		    <a th:href="@{list.do(page=1)}" aria-label="First">
-		        <span aria-hidden="true">First</span>
-		    </a>
-		    <a th:class="${noticeDtoList.first} ? 'disabled'" th:href="${noticeDtoList.first} ? '#' :@{list.do(page=${noticeDtoList.number})}" aria-label="Previous">
-		        <span aria-hidden="true">&lt;</span>
-		    </a>
-		    <a th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == noticeDtoList.number + 1} ? 'active'" th:text="${page}" th:href="@{list.do(page=${page})}"></a>
-		    <a th:class="${noticeDtoList.last} ? 'disabled'" th:href="${noticeDtoList.last} ? '#' : @{list.do(page=${noticeDtoList.number + 2})}" aria-label="Next">
-		        <span aria-hidden="true">&gt;</span>
-		    </a>
-		    <a th:href="@{list.do(page=${noticeDtoList.totalPages})}" aria-label="Last">
-		        <span aria-hidden="true">Last</span>
-		    </a>
+	<th:block layout:fragment="header" th:include="@{/fragments/header}">
+			<h1>Home Page</h1>
+	        <hr>
+	        <a sec:authorize="isAnonymous()" th:href="@{/workplus/login}">로그인</a>
+	        <a sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+	        <a sec:authorize="isAnonymous()" th:href="@{/workplus/signup}">회원가입</a>
+	        <a sec:authorize="hasRole('ROLE_MEMBER')" th:href="@{/workplus/member/info}">내정보</a>
+			<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/workplus/admin}">어드민</a>
+	</th:block>
+		
+	<div layout:fragment="content" class="content">
+		<h1>공지사항</h1>
+		
+		<table class="table table-striped">
+			<thead>
+			    <tr>
+			      <th scope="col">번호</th>
+			      <th scope="col">제목</th>
+			      <th scope="col">조회수</th>
+			      <th scope="col">작성자</th>
+			      <th scope="col">작성일자</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr th:each="notice:${noticeDtoList}">
+					<td>
+						<span th:text="${notice.seq}"></span>
+					</td>
+					<td>
+						<a th:href="|@{/workplus/notice/view.do}?noticeSeq=${notice.seq}|" th:text="${notice.title}"></a>
+					</td>
+					<td>
+						<span th:text="${notice.viewCnt}"></span>
+					</td>
+					<td>
+						<span th:text="${notice.writer}"></span>
+					</td>
+					<td>
+						<span th:text="${notice.createdDate}"></span>
+					</td>
+				</tr>
+		 	</tbody>
+		</table>
+		 
+		<nav>
+			<div th:with="start=${T(Math).floor(noticeDtoList.number/10)*10 + 1},
+		                    last=(${start + 9 < noticeDtoList.totalPages ? start + 9 : noticeDtoList.totalPages})">
+				    <a th:href="@{list.do(page=1)}" aria-label="First">
+				        <span aria-hidden="true">First</span>
+				    </a>
+				    <a th:class="${noticeDtoList.first} ? 'disabled'" th:href="${noticeDtoList.first} ? '#' :@{list.do(page=${noticeDtoList.number})}" aria-label="Previous">
+				        <span aria-hidden="true">&lt;</span>
+				    </a>
+				    <a th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == noticeDtoList.number + 1} ? 'active'" th:text="${page}" th:href="@{list.do(page=${page})}"></a>
+				    <a th:class="${noticeDtoList.last} ? 'disabled'" th:href="${noticeDtoList.last} ? '#' : @{list.do(page=${noticeDtoList.number + 2})}" aria-label="Next">
+				        <span aria-hidden="true">&gt;</span>
+				    </a>
+				    <a th:href="@{list.do(page=${noticeDtoList.totalPages})}" aria-label="Last">
+				        <span aria-hidden="true">Last</span>
+				    </a>
+			</div>
+		</nav>
+		
+		<div>
+			<button onclick="location.href='/workplus/notice/write.do'">글작성 개발 테스트용</button>
+			<button sec:authorize="hasRole('ROLE_ADMIN')" onclick="location.href='/workplus/notice/write.do'">글작성</button>
+		</div>
+			
 	</div>
-</nav>
-
-<div>
-	<button onclick="location.href='/workplus/notice/write.do'">글작성</button>
-</div>
+			
+	<th:block layout:fragment="footer" th:include="@{/fragments/footer}"></th:block> 
 
 </body>
 

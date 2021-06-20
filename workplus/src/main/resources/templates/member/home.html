@@ -1,22 +1,33 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta charset="UTF-8">
-        <title>Home</title>
-    </head>
-    <body>
-        <h1>Home Page</h1>
-        <hr>
-        <a sec:authorize="isAnonymous()" th:href="@{/workplus/login}">로그인</a>
-        <a sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
-        <a sec:authorize="isAnonymous()" th:href="@{/workplus/signup}">회원가입</a>
-        <a sec:authorize="hasRole('ROLE_MEMBER')" th:href="@{/workplus/member/info}">내정보</a>
-		<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/workplus/admin}">어드민</a>
-        <!-- 
-        <div>
-            <a th:href="@{/workplus/member/info}">내 정보</a>
-            <a th:href="@{/workplus/admin}">관리자</a>
-        </div>
-         -->
-    </body>
+<html xmlns:th="http://www.w3.org/1999/xhtml"
+	  xmlns:sec="http://www.w3.org/1999/xhtml"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	  layout:decorate="~{layout/default_layout}">
+    
+    <th:block layout:fragment="head">
+	    <title>Home</title>
+	    
+	    <!--/* css */-->
+	    <link th:href="@{/css/common.css}" rel="stylesheet" />
+    </th:block>
+
+	<body>
+		<th:block layout:fragment="header" th:include="@{/fragments/header}">
+			<h1>Home Page</h1>
+	        <hr>
+	        <a sec:authorize="isAnonymous()" th:href="@{/workplus/login.do}">로그인</a>
+	        <a sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+	        <a sec:authorize="isAnonymous()" th:href="@{/workplus/signup.do}">회원가입</a>
+	        <a sec:authorize="hasRole('ROLE_MEMBER')" th:href="@{/workplus/member/info.do}">내정보</a>
+			<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/workplus/admin.do}">어드민</a>
+		</th:block>
+		
+		<div layout:fragment="content" class="content">
+			<h1>Content</h1>
+		</div>
+			
+		<th:block layout:fragment="footer" th:include="@{/fragments/footer}"></th:block> 
+	</body>
+    
 </html>
