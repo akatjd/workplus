@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
+import com.kjc.workplus.login.repository.MemberAuthorityRepository;
 import com.kjc.workplus.notice.repository.NoticeRepository;
 
 @DataJpaTest
@@ -18,6 +19,9 @@ public class NoticeUpdateTests {
 	@Autowired
 	private NoticeRepository noticeRepository;
 	
+	@Autowired
+	private MemberAuthorityRepository memberAuthorityRepository;
+	
 	@Test
 	public void update() {
 		System.out.println("테스트");
@@ -27,5 +31,10 @@ public class NoticeUpdateTests {
 	@Test
 	public void viewCntUpdate() {
 		System.out.println(noticeRepository.updateViewCnt(1L));
+	}
+	
+	@Test
+	public void updateAuthorityName() {
+		memberAuthorityRepository.updateAuthorityName("ROLE_ADMIN", "admin01@gmail.com");
 	}
 }

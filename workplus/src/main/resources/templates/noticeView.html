@@ -76,8 +76,10 @@
 		</table>
 		
 		<a th:href="@{/workplus/notice/list.do}">메인</a>
-		<a th:href="@{/workplus/notice/delete.do(noticeSeq=${noticeResponseDto.seq})}">삭제</a>
-		<a th:href="@{/workplus/notice/write.do(noticeSeq=${noticeResponseDto.seq})}">수정</a>
+		<div th:if="${noticeResponseDto.writer} == ${writer}">
+			<a th:href="@{/workplus/notice/delete.do(noticeSeq=${noticeResponseDto.seq})}">삭제</a>
+			<a th:href="@{/workplus/notice/write.do(noticeSeq=${noticeResponseDto.seq})}">수정</a>
+		</div>
 		
 	</div>
 	

@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -80,12 +81,15 @@ public class NoticeController {
 	 * 공지사항 상세내용 확인
 	 */
 	@GetMapping(value = "/view.do")
-	public String openNoticeDetail(@RequestParam(value = "noticeSeq", required = false) Long noticeSeq, Model model) {
+	public String openNoticeDetail(@RequestParam(value = "noticeSeq", required = false) Long noticeSeq, Principal principal, Model model) {
 		
 		NoticeResponseDto noticeResponseDto = noticeService.findById(noticeSeq);
 		
+		String writer = principal.getName();
+		
 		noticeService.updateViewCnt(noticeSeq);
-
+		
+		model.addAttribute("writer", writer);
 		model.addAttribute("noticeResponseDto", noticeResponseDto);
 		
 		List<FilesDto> fileList = filesService.getFiles(noticeSeq); // 추가된 로직

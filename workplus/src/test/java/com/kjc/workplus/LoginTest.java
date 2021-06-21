@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kjc.workplus.login.domain.Member;
 import com.kjc.workplus.login.domain.MemberAuthority;
@@ -75,6 +77,15 @@ public class LoginTest {
 				 .memberId("admin01")
 				 .authorityName("ROLE_ADMIN")
 				 .build());			
+		
+	}
+	
+	@Transactional
+	@Test
+	@Rollback(false)
+	public void updateAuthorityName() {
+		
+		memberAuthorityRepository.updateAuthorityName("ROLE_ADMIN", "admin01@gmail.com");
 		
 	}
 }
