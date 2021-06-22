@@ -88,4 +88,9 @@ public class LoginTest {
 		memberAuthorityRepository.updateAuthorityName("ROLE_ADMIN", "admin01@gmail.com");
 		
 	}
+	
+	@Test
+	public void idCheck() {
+		System.out.println(memberRepository.idChk("admin01@gmail.com"));
+	}
 }

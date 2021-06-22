@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml"
+	  xmlns:sec="http://www.w3.org/1999/xhtml"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	  layout:decorate="~{layout/default_layout}">
+	  
     <head>
         <meta charset="UTF-8">
         <title>회원가입 페이지</title>
-        <script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script th:inline="javascript">
 	        function check_pw(){  //비밀번호 확인 
 	            var p = document.getElementById('pw').value; 
 	            var p_cf = document.getElementById('pw_cf').value; 
@@ -18,6 +25,27 @@
 	              document.getElementById('pw_check_msg').innerHTML = ""; 
 	            } 
 	        }
+	        
+	        function fn_idChk(){
+	        	/*<![CDATA[*/
+	        	var a = /*[[ ${result} ]]*/;
+	        	console.log(a);
+				$.ajax({
+					url : "/workplus/idChk.do",
+					type : "post",
+					dataType : "json",
+					data : {"memberId" : $("#memberId").val()},
+					success : function(data){
+						if(data == 1){
+							alert("중복된 아이디입니다.");
+						}else if(data == 0){
+							$("#idChk").attr("value", "Y");
+							alert("사용가능한 아이디입니다.");
+						}
+					}
+				})
+				/*]]>*/
+			}
         </script>
     </head>
     <body>
@@ -27,7 +55,8 @@
         <form th:action="@{/workplus/signup.do}" method="post" enctype="multipart/form-data"><br>
         	아이디<br>
         	<!--PATTER으로 메일 유효성 검사 -->
-            <input type="email" name="memberId" value="" size="20" placeholder="이메일 아이디 입력" pattern="[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}" required> 예) id@domain.com <br>
+            <input type="email" name="memberId" id="memberId" value="" size="20" placeholder="이메일 아이디 입력" pattern="[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}" required> 예) id@domain.com 
+            <button class="idChk" type="button" id="idChk" onclick="fn_idChk();" value="N">중복확인</button><br>
             닉네임<br>
             <input type="text" name="nickname" placeholder="nickname 입력"><br>
             패스워드<br>

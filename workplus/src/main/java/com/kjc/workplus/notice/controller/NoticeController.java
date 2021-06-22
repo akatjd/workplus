@@ -192,8 +192,6 @@ public class NoticeController {
         		List<NoticeResponseDto> noticeDtoList = noticeService.findAllNature();
         		
         		model.addAttribute("noticeDtoList", noticeDtoList);
-        		
-        		
     			
     		}catch(Exception e) {
     			e.printStackTrace();	

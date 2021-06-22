@@ -17,10 +17,13 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	Member findMemberByMemberId(String memberId);
 	
 	@Modifying
-	@Query("UPDATE Member members SET members.password = :password WHERE members.memberId = :memberId")
+	@Query("UPDATE Member m SET m.password = :password WHERE m.memberId = :memberId")
 	int updatePassword(@Param("password") String password, @Param("memberId") String memberId);
 	
 	@Query(value = "SELECT COUNT(*) FROM wp_member;", nativeQuery = true)
 	Long findSeqIncrement();
+	
+	@Query("SELECT COUNT(m) FROM Member m WHERE m.memberId = :memberId")
+	int idChk(@Param("memberId") String memberId);
 	
 }

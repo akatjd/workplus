@@ -90,4 +90,11 @@ public class MemberService implements UserDetailsService {
     	return (memberRepository.findSeqIncrement()+1);
     	
     }
+	
+	@Transactional
+	public int idChk(String memberId) {
+		
+		return memberRepository.idChk(memberId);
+		
+	}
 }
