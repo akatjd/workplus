@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -132,16 +133,29 @@ public class MemberController {
     public String deniedView() {
     	
         return "member/denied";
-        
+        	
     }
     
     // 아이디 중복 체크
     @ResponseBody
-    @RequestMapping(value="/idChk.do", method = RequestMethod.POST)
-    public int idChk(MemberDto memberDto) throws Exception {
-    	int result = memberService.idChk(memberDto.getMemberId());
-    	System.out.println(result);
+    @PostMapping("/idChk.do")
+    public int idChk(String memberId) throws Exception {
+    	
+    	int result = memberService.idChk(memberId);
     	return result;
+    	
+    }
+    
+    // 닉네임 중복 체크
+    @ResponseBody
+    @PostMapping("/nickChk.do")
+    public int nickChk(String nickname) throws Exception {
+    	
+    	System.out.println(nickname);
+    	
+    	int result = memberService.nickChk(nickname);
+    	return result;
+    	
     }
 
 }

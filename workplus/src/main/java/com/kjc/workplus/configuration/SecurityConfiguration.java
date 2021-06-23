@@ -84,6 +84,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.exceptionHandling()
 		        .accessDeniedPage("/workplus/denied.do");
 		
+		http.csrf()
+				.ignoringAntMatchers("/workplus/idChk.do")
+				.ignoringAntMatchers("/workplus/nickChk.do");
+		
 	}
 	
 	@Override

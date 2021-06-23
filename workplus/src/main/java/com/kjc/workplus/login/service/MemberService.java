@@ -94,7 +94,16 @@ public class MemberService implements UserDetailsService {
 	@Transactional
 	public int idChk(String memberId) {
 		
+		System.out.println("memberId service : " + memberId);
+		
 		return memberRepository.idChk(memberId);
+		
+	}
+	
+	@Transactional
+	public int nickChk(String nickname) {
+		
+		return memberRepository.nickChk(nickname);
 		
 	}
 }
