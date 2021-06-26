@@ -85,17 +85,31 @@ public class NoticeController {
 		
 		NoticeResponseDto noticeResponseDto = noticeService.findById(noticeSeq);
 		
-		String writer = principal.getName();
-		
-		noticeService.updateViewCnt(noticeSeq);
-		
-		model.addAttribute("writer", writer);
-		model.addAttribute("noticeResponseDto", noticeResponseDto);
-		
-		List<FilesDto> fileList = filesService.getFiles(noticeSeq); // 추가된 로직
-		model.addAttribute("fileList", fileList); // 추가된 로직
+		if(principal != null) {
+			String writer = principal.getName();
+			
+			System.out.println(writer);
+			
+			noticeService.updateViewCnt(noticeSeq);
+			
+			model.addAttribute("writer", writer);
+			model.addAttribute("noticeResponseDto", noticeResponseDto);
+			
+			List<FilesDto> fileList = filesService.getFiles(noticeSeq); // 추가된 로직
+			model.addAttribute("fileList", fileList); // 추가된 로직
 
-		return "noticeView";
+			return "noticeView";
+		}else {
+			
+			noticeService.updateViewCnt(noticeSeq);
+
+			model.addAttribute("noticeResponseDto", noticeResponseDto);
+			
+			List<FilesDto> fileList = filesService.getFiles(noticeSeq); // 추가된 로직
+			model.addAttribute("fileList", fileList); // 추가된 로직
+
+			return "noticeView";
+		}
 	}
 	
 	/**
@@ -148,7 +162,7 @@ public class NoticeController {
 	 * 공지사항 글 등록
 	 */
     @PostMapping(value = "/register.do")
-    public String openNoticeRegister(@RequestParam("file") MultipartFile[] files, NoticeSaveRequestDto noticeSaveRequestDto, Model model) {
+    public String openNoticeRegister(@RequestParam("file") MultipartFile[] files, @PageableDefault Pageable pageRequest, NoticeSaveRequestDto noticeSaveRequestDto, Model model) {
     	
     	if(noticeSaveRequestDto.getSeq() == null) {
     		try {
@@ -188,13 +202,16 @@ public class NoticeController {
     			}
         		
         		noticeService.save(noticeSaveRequestDto);
-        		
-        		List<NoticeResponseDto> noticeDtoList = noticeService.findAllNature();
-        		
+
+        		Page<Notice> noticeDtoList = noticeService.getNoticeList(pageRequest);
         		model.addAttribute("noticeDtoList", noticeDtoList);
+        		
+        		log.debug("총 element 수 : {}, 전체 page 수 : {}, 페이지에 표시할 element 수 : {}, 현재 페이지 index : {}, 현재 페이지의 element 수 : {}",
+        				noticeDtoList.getTotalElements(), noticeDtoList.getTotalPages(), noticeDtoList.getSize(),
+        				noticeDtoList.getNumber(), noticeDtoList.getNumberOfElements());
     			
     		}catch(Exception e) {
-    			e.printStackTrace();	
+    			e.printStackTrace();
     		}  	
     		
     		return "noticeList";
@@ -244,8 +261,7 @@ public class NoticeController {
                 		model.addAttribute("noticeResponseDto", noticeResponseDto);
                 		
                 		List<FilesDto> fileList = filesService.getFiles(noticeSeq);
-                		model.addAttribute("fileList", fileList);
-                		
+                		model.addAttribute("fileList", fileList);	
                 		
     				}
     			}

@@ -36,6 +36,9 @@ public class NoticeService {
 								.collect(Collectors.toList());
 	}
 	
+	/**
+	 * 페이징
+	 */
 	public Page<Notice> getNoticeList(Pageable pageable) {
 		
 		int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
@@ -78,24 +81,36 @@ public class NoticeService {
         noticeRepository.delete(notice);
     }
     
+    /**
+     * 공지사항 수정
+     */
     @Transactional
     public void update(NoticeSaveRequestDto noticeSaveRequestDto) {
     	
     	noticeRepository.update(noticeSaveRequestDto.getSeq(), noticeSaveRequestDto.getTitle(), noticeSaveRequestDto.getContent());
     }
     
+    /**
+     * 조회수 카운트
+     */
     @Transactional
     public void updateViewCnt(Long noticeSeq) {
     	
     	noticeRepository.updateViewCnt(noticeSeq);
     }
     
+    /**
+     * 공지사항 삭제
+     */
     @Transactional
     public void updateDeleteYn(Long noticeSeq) {
     
     	noticeRepository.updateDeleteYn(noticeSeq, "Y");
     }
     
+    /**
+     * 시퀀스 넘버 찾기
+     */
     @Transactional
     public Long findSeqIncrement() {
     	return (noticeRepository.findSeqIncrement()+1);
