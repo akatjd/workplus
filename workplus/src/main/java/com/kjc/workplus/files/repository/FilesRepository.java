@@ -22,4 +22,7 @@ public interface FilesRepository extends JpaRepository<Files, Long> {
 	
 	@Query("SELECT COUNT(fileNumber) FROM Files files WHERE files.category = :category and files.categorySeq = :categorySeq")
 	int findFilesCnt(@Param("category") String category, @Param("categorySeq") Long categorySeq);
+	
+	@Query("SELECT f.fileStreCours FROM Files f WHERE f.categorySeq = :memberSeq and f.category = :category")
+	String getFileCours(@Param("memberSeq") Long memberSeq, @Param("category") String category);
 }

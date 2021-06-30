@@ -171,6 +171,11 @@ public class NoticeController {
     			for(int i=0; i<files.length; i++) {
     				String originFileName = files[i].getOriginalFilename();
     				
+//    				String[] fileExtension = originFileName.split(".");
+//    				
+//    				System.out.println(fileExtension[0]);
+//    				System.out.println(fileExtension[1]);
+    				
     				if(originFileName != null) {
     					String streFileName = new MD5Generator(originFileName).toString();
             			/* 오늘 날짜 */

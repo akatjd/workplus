@@ -93,4 +93,19 @@ public class LoginTest {
 	public void idCheck() {
 		System.out.println(memberRepository.idChk("admin01@gmail.com"));
 	}
+	
+	@Test
+	public void getMemberSeq() {
+		System.out.println(memberRepository.getMemberSeq("member03@gmail.com"));
+	}
+	
+	@Test
+	public void strTest() {
+		String fileName = "프로필아이콘01.png";
+	
+		String[] fileName2 = fileName.split("\\.");
+		
+		System.out.println(fileName2[fileName.length()-1]);
+		System.out.println(fileName2[1]);
+	}
 }
