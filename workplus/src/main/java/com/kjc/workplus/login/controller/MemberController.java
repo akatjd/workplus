@@ -2,6 +2,7 @@ package com.kjc.workplus.login.controller;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -36,7 +37,9 @@ public class MemberController {
 	private FilesService filesService;
 	
 	@GetMapping("/main.do")
-    public String homeView() {
+    public String homeView(Principal principal) {
+		
+		System.out.println("principal getName() : "+principal.getName());
 		
         return "member/home";
         

@@ -4,9 +4,9 @@
 
 	<div class="header">
 		<h2>일더하기 Work+</h2> 
-		<a sec:authorize="isAnonymous()" th:href="@{/workplus/notice/list.do}">공지사항</a>
-		<a sec:authorize="isAnonymous()" >FAQ</a>
-		<a sec:authorize="isAnonymous()" >상품목록</a>
+		<a th:href="@{/workplus/notice/list.do}">공지사항</a>
+		<a>FAQ</a>
+		<a>상품목록</a>
 		<a sec:authorize="isAnonymous()" th:href="@{/workplus/login.do}" style="float:right">로그인</a>
         <a sec:authorize="isAuthenticated()" th:href="@{/logout}" style="float:right">로그아웃</a>
         <a sec:authorize="isAnonymous()" th:href="@{/workplus/signup.do}" style="float:right">회원가입</a>
