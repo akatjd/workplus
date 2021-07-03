@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.kjc.workplus.files.repository.FilesRepository;
 import com.kjc.workplus.login.domain.Member;
 import com.kjc.workplus.login.domain.MemberAuthority;
 import com.kjc.workplus.login.dto.MemberDto;
@@ -31,6 +32,9 @@ public class MemberService implements UserDetailsService {
 	
 	@Autowired
 	MemberAuthorityRepository memberAuthorityRepository;
+	
+	@Autowired
+	FilesRepository filesRepository;
 	
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
@@ -90,4 +94,31 @@ public class MemberService implements UserDetailsService {
     	return (memberRepository.findSeqIncrement()+1);
     	
     }
+	
+	@Transactional
+	public int idChk(String memberId) {
+		
+		System.out.println("memberId service : " + memberId);
+		
+		return memberRepository.idChk(memberId);
+		
+	}
+	
+	@Transactional
+	public int nickChk(String nickname) {
+		
+		return memberRepository.nickChk(nickname);
+		
+	}
+	
+	public String getFileCours(String memberId) {
+		
+		// memberId로 memberSeq 값 가져오기
+		int memberSeq = memberRepository.getMemberSeq(memberId);
+		
+		// 프로필사진 경로 가져오기
+		String fileCours = filesRepository.getFileCours(Long.valueOf(memberSeq), "MEMBER");
+		
+		return "12";
+	}
 }

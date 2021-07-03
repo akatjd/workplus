@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kjc.workplus.login.domain.Member;
 import com.kjc.workplus.login.domain.MemberAuthority;
@@ -76,5 +78,34 @@ public class LoginTest {
 				 .authorityName("ROLE_ADMIN")
 				 .build());			
 		
+	}
+	
+	@Transactional
+	@Test
+	@Rollback(false)
+	public void updateAuthorityName() {
+		
+		memberAuthorityRepository.updateAuthorityName("ROLE_ADMIN", "admin01@gmail.com");
+		
+	}
+	
+	@Test
+	public void idCheck() {
+		System.out.println(memberRepository.idChk("admin01@gmail.com"));
+	}
+	
+	@Test
+	public void getMemberSeq() {
+		System.out.println(memberRepository.getMemberSeq("member03@gmail.com"));
+	}
+	
+	@Test
+	public void strTest() {
+		String fileName = "프로필아이콘01.png";
+	
+		String[] fileName2 = fileName.split("\\.");
+		
+		System.out.println(fileName2[fileName.length()-1]);
+		System.out.println(fileName2[1]);
 	}
 }

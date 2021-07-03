@@ -81,18 +81,35 @@ public class NoticeController {
 	 * 공지사항 상세내용 확인
 	 */
 	@GetMapping(value = "/view.do")
-	public String openNoticeDetail(@RequestParam(value = "noticeSeq", required = false) Long noticeSeq, Model model) {
+	public String openNoticeDetail(@RequestParam(value = "noticeSeq", required = false) Long noticeSeq, Principal principal, Model model) {
 		
 		NoticeResponseDto noticeResponseDto = noticeService.findById(noticeSeq);
 		
-		noticeService.updateViewCnt(noticeSeq);
+		if(principal != null) {
+			String writer = principal.getName();
+			
+			System.out.println(writer);
+			
+			noticeService.updateViewCnt(noticeSeq);
+			
+			model.addAttribute("writer", writer);
+			model.addAttribute("noticeResponseDto", noticeResponseDto);
+			
+			List<FilesDto> fileList = filesService.getFiles(noticeSeq); // 추가된 로직
+			model.addAttribute("fileList", fileList); // 추가된 로직
 
-		model.addAttribute("noticeResponseDto", noticeResponseDto);
-		
-		List<FilesDto> fileList = filesService.getFiles(noticeSeq); // 추가된 로직
-		model.addAttribute("fileList", fileList); // 추가된 로직
+			return "noticeView";
+		}else {
+			
+			noticeService.updateViewCnt(noticeSeq);
 
-		return "noticeView";
+			model.addAttribute("noticeResponseDto", noticeResponseDto);
+			
+			List<FilesDto> fileList = filesService.getFiles(noticeSeq); // 추가된 로직
+			model.addAttribute("fileList", fileList); // 추가된 로직
+
+			return "noticeView";
+		}
 	}
 	
 	/**
@@ -145,7 +162,7 @@ public class NoticeController {
 	 * 공지사항 글 등록
 	 */
     @PostMapping(value = "/register.do")
-    public String openNoticeRegister(@RequestParam("file") MultipartFile[] files, NoticeSaveRequestDto noticeSaveRequestDto, Model model) {
+    public String openNoticeRegister(@RequestParam("file") MultipartFile[] files, @PageableDefault Pageable pageRequest, NoticeSaveRequestDto noticeSaveRequestDto, Model model) {
     	
     	if(noticeSaveRequestDto.getSeq() == null) {
     		try {
@@ -153,6 +170,11 @@ public class NoticeController {
     			
     			for(int i=0; i<files.length; i++) {
     				String originFileName = files[i].getOriginalFilename();
+    				
+//    				String[] fileExtension = originFileName.split(".");
+//    				
+//    				System.out.println(fileExtension[0]);
+//    				System.out.println(fileExtension[1]);
     				
     				if(originFileName != null) {
     					String streFileName = new MD5Generator(originFileName).toString();
@@ -185,15 +207,16 @@ public class NoticeController {
     			}
         		
         		noticeService.save(noticeSaveRequestDto);
-        		
-        		List<NoticeResponseDto> noticeDtoList = noticeService.findAllNature();
-        		
+
+        		Page<Notice> noticeDtoList = noticeService.getNoticeList(pageRequest);
         		model.addAttribute("noticeDtoList", noticeDtoList);
         		
-        		
+        		log.debug("총 element 수 : {}, 전체 page 수 : {}, 페이지에 표시할 element 수 : {}, 현재 페이지 index : {}, 현재 페이지의 element 수 : {}",
+        				noticeDtoList.getTotalElements(), noticeDtoList.getTotalPages(), noticeDtoList.getSize(),
+        				noticeDtoList.getNumber(), noticeDtoList.getNumberOfElements());
     			
     		}catch(Exception e) {
-    			e.printStackTrace();	
+    			e.printStackTrace();
     		}  	
     		
     		return "noticeList";
@@ -243,8 +266,7 @@ public class NoticeController {
                 		model.addAttribute("noticeResponseDto", noticeResponseDto);
                 		
                 		List<FilesDto> fileList = filesService.getFiles(noticeSeq);
-                		model.addAttribute("fileList", fileList);
-                		
+                		model.addAttribute("fileList", fileList);	
                 		
     				}
     			}

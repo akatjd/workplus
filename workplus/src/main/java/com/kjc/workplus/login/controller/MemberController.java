@@ -10,12 +10,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kjc.workplus.files.dto.FilesDto;
@@ -39,7 +45,7 @@ public class MemberController {
 	@GetMapping("/main.do")
     public String homeView(Principal principal) {
 		
-		System.out.println("principal getName() : "+principal.getName());
+//		System.out.println("principal getName() : "+principal.getName());
 		
         return "member/home";
         
@@ -112,10 +118,26 @@ public class MemberController {
         return "redirect:/workplus/login.do";
         
     }
-
+    
+    /**
+     * 회원정보 페이지
+     */
     @PreAuthorize("hasRole('ROLE_MEMBER')")
     @GetMapping("/member/info.do")
-    public String userInfoView() {
+    public String userInfoView(Authentication authentication) {
+    	
+    	System.out.println("타입정보 : " + authentication.getClass());
+    	
+    	// 세션 정보 객체 반환
+		WebAuthenticationDetails web = (WebAuthenticationDetails)authentication.getDetails();
+		System.out.println("세션ID : " + web.getSessionId());
+		System.out.println("접속IP : " + web.getRemoteAddress());
+
+		// UsernamePasswordAuthenticationToken에 넣었던 UserDetails 객체 반환
+		UserDetails userVO = (UserDetails) authentication.getPrincipal();
+		System.out.println("ID정보 : " + userVO.getUsername());
+		
+		// 프로필 사진 경로 가져와야함
     	
         return "member/user_info";
         
@@ -133,7 +155,29 @@ public class MemberController {
     public String deniedView() {
     	
         return "member/denied";
-        
+        	
+    }
+    
+    // 아이디 중복 체크
+    @ResponseBody
+    @PostMapping("/idChk.do")
+    public int idChk(String memberId) throws Exception {
+    	
+    	int result = memberService.idChk(memberId);
+    	return result;
+    	
+    }
+    
+    // 닉네임 중복 체크
+    @ResponseBody
+    @PostMapping("/nickChk.do")
+    public int nickChk(String nickname) throws Exception {
+    	
+    	System.out.println(nickname);
+    	
+    	int result = memberService.nickChk(nickname);
+    	return result;
+    	
     }
 
 }

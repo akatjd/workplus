@@ -44,16 +44,18 @@ public class NoticeSaveRequestDto {
 	 * 공지사항 글쓰기 생성자
 	 */
 	@Builder
-	public NoticeSaveRequestDto(String title, String content) {
+	public NoticeSaveRequestDto(String title, String content, String writer) {
 	  this.title = title;
 	  this.content = content;
+	  this.writer = writer;
 	}
 	
 	@Builder
-	public NoticeSaveRequestDto(Long seq, String title, String content) {
+	public NoticeSaveRequestDto(Long seq, String title, String content, String writer) {
 	  this.seq = seq;
 	  this.title = title;
 	  this.content = content;
+	  this.writer = writer;
 	}
 
 	public Notice toEntity() {

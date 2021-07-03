@@ -55,4 +55,9 @@ public class FilesRepositoryTests {
 		System.out.println(filesRepository.findFilesCnt("NOTICE", 13L));
 	}
 	
+	@Test
+	public void getFileCours() {
+		System.out.println(filesRepository.getFileCours(3L, "MEMBER"));
+	}
+	
 }

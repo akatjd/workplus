@@ -1,10 +1,64 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta charset="UTF-8">
-        <title>내 정보</title>
-    </head>
+<html xmlns:th="http://www.w3.org/1999/xhtml"
+	  xmlns:sec="http://www.w3.org/1999/xhtml"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	  layout:decorate="~{layout/default_layout}">
+	  
+    <th:block layout:fragment="head">
+	    <title>Home</title>
+	    
+	    <!--/* css */-->
+	    <link th:href="@{/css/common.css}" rel="stylesheet" />
+	    
+	    <style>
+	      div.myPage {
+	        width: 100%;
+	        height: 480px;
+	        border: 1px solid #003458;
+	      }
+	      div.left {
+	        width: 20%;
+	        float: left;
+	        box-sizing: border-box;
+	        background: rgba(0, 0, 0, 0);
+	      }
+	      div.right {
+	        width: 80%;
+	        float: right;
+	        box-sizing: border-box;
+	        background: rgba(0, 0, 0, 0);
+	      }
+	    </style>
+    </th:block>
+    
     <body>
+    
+    	<th:block layout:fragment="header" th:include="@{/fragments/header}">
+			<h1>Home Page</h1>
+	        <hr>
+	        <a sec:authorize="isAnonymous()" th:href="@{/workplus/login.do}">로그인</a>
+	        <a sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+	        <a sec:authorize="isAnonymous()" th:href="@{/workplus/signup.do}">회원가입</a>
+	        <a sec:authorize="hasRole('ROLE_MEMBER')" th:href="@{/workplus/member/info.do}">내정보</a>
+			<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/workplus/admin.do}">어드민</a>
+		</th:block>
+		
+		<div layout:fragment="content" class="content">
+			<h1>마이페이지</h1>
+			<div class="myPage">
+			    <div class="left">
+			      왼쪽<br>
+			      <img src="/upload/profile.jpg">
+			    </div>
+			    <div class="right">
+			      오른쪽
+			    </div>
+		    </div>
+		</div>
+			
+		<th:block layout:fragment="footer" th:include="@{/fragments/footer}"></th:block> 
+		
         <h1>내 정보</h1>
         <hr>
         <span sec:authentication="name"></span> 님 반갑습니다.

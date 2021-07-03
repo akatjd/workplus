@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,10 +28,10 @@ public class Member {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long memberSeq;
 	
-	@Column(name = "member_id", length = 200, nullable = true)
+	@Column(name = "member_id", length = 200, nullable = true, unique = true)
 	private String memberId;
 	
-	@Column(name = "nickname", length = 20, nullable = true)
+	@Column(name = "nickname", length = 20, nullable = true, unique = true)
 	private String nickname;
 	
 	@Column(name = "password", length = 100, nullable = true)
