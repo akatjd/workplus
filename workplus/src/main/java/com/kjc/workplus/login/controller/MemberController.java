@@ -82,8 +82,11 @@ public class MemberController {
 			
 			String originFileName = file[0].getOriginalFilename();
 			
+			String[] splitFile = originFileName.split("\\.");
+			
 			if(originFileName != null) {
 				String streFileName = new MD5Generator(originFileName).toString();
+				streFileName = streFileName + "." + splitFile[splitFile.length-1];
     			/* 오늘 날짜 */
     			String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
     			/* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
@@ -124,7 +127,7 @@ public class MemberController {
      */
     @PreAuthorize("hasRole('ROLE_MEMBER')")
     @GetMapping("/member/info.do")
-    public String userInfoView(Authentication authentication) {
+    public String userInfoView(Authentication authentication, Model model) {
     	
     	System.out.println("타입정보 : " + authentication.getClass());
     	
@@ -138,6 +141,19 @@ public class MemberController {
 		System.out.println("ID정보 : " + userVO.getUsername());
 		
 		// 프로필 사진 경로 가져와야함
+		String fileCours = memberService.getFileCours(userVO.getUsername());
+		
+		String[] splitFile = fileCours.split("\\\\");
+		
+		for(int i=0; i<splitFile.length; i++) {
+			System.out.println(splitFile[i]);
+		}
+		
+		fileCours = splitFile[splitFile.length-2] + "\\" + splitFile[splitFile.length-1]; 
+		
+		log.info(fileCours);
+		
+		model.addAttribute("fileCours", fileCours);
     	
         return "member/user_info";
         

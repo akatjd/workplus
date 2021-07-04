@@ -119,6 +119,6 @@ public class MemberService implements UserDetailsService {
 		// 프로필사진 경로 가져오기
 		String fileCours = filesRepository.getFileCours(Long.valueOf(memberSeq), "MEMBER");
 		
-		return "12";
+		return fileCours;
 	}
 }

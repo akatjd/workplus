@@ -171,13 +171,11 @@ public class NoticeController {
     			for(int i=0; i<files.length; i++) {
     				String originFileName = files[i].getOriginalFilename();
     				
-//    				String[] fileExtension = originFileName.split(".");
-//    				
-//    				System.out.println(fileExtension[0]);
-//    				System.out.println(fileExtension[1]);
+    				String[] splitFile = originFileName.split("\\.");
     				
     				if(originFileName != null) {
     					String streFileName = new MD5Generator(originFileName).toString();
+    					streFileName = streFileName + "." + splitFile[splitFile.length-1];
             			/* 오늘 날짜 */
             			String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
             			/* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
@@ -232,8 +230,11 @@ public class NoticeController {
     			for(int i=0; i<files.length; i++) {
     				String originFileName = files[i].getOriginalFilename();
     				
+    				String[] splitFile = originFileName.split("\\.");
+    				
     				if(originFileName != null) {
     					String streFileName = new MD5Generator(originFileName).toString();
+    					streFileName = streFileName + "." + splitFile[splitFile.length-1];
             			/* 오늘 날짜 */
             			String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
             			/* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. */
