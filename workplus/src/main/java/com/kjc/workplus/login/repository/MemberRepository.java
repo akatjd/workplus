@@ -32,4 +32,13 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	@Query("SELECT m.memberSeq FROM Member m WHERE m.memberId = :memberId")
 	int getMemberSeq(@Param("memberId") String memberId);
 	
+	@Query("SELECT m FROM Member m WHERE m.memberId = :memberId")
+	Member findMembData(@Param("memberId") String memberId);
+	
+	@Query("SELECT m.password FROM Member m WHERE m.memberId = :memberId")
+	String getMemberPw(@Param("memberId") String memberId);
+	
+	@Modifying
+	@Query("UPDATE Member m SET m.nickname = :nickname, m.hphone = :hphone WHERE m.memberId = :memberId")
+	int updateProfile(@Param("memberId") String memberId, @Param("nickname") String nickname, @Param("hphone") String hphone);
 }

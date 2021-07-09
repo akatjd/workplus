@@ -54,49 +54,50 @@
 			<div class="myPage">
 			    <div class="left">
 			      왼쪽<br>
-			      <img th:src="'/upload/' + ${fileCours}"><br>
-			      <div style="float:left;position:relative;left:15%">
+			      <img th:src="'/upload/' + ${fileCours}" width="200" height="200"><br>
+			      <div style="float:left;position:relative;left:10%">
 				 	 <a href="#" class="btn btn-primary active" role="button" data-bs-toggle="button" aria-pressed="true">프로필 관리</a>
 				  </div>		  
 			    </div>
 			    <div class="right">
 				    오른쪽<br>
+				<form id="frm" th:object="${memberDto}" th:action="@{/workplus/member/updateProfile.do}" method="post" enctype="multipart/form-data">
 				    <div class="input-group mb-3">
 				    	<label for="staticEmail" class="col-sm-2 col-form-label">프로필 사진 변경</label>
-						<input type="file" class="form-control" id="inputGroupFile02">
-						<label class="input-group-text" for="inputGroupFile02">Upload</label>
+						<input type="file" class="form-control" name="file" id="inputGroupFile02">
 					</div>
 					<div class="mb-3 row">
 						<label for="staticEmail" class="col-sm-2 col-form-label">아이디</label>
 						<div class="col-sm-10">
-							<input type="text" readonly class="form-control-plaintext" id="staticEmail" th:value="${memberId}">
+							<input type="text" readonly class="form-control-plaintext" name="memberId" id="memberId" th:value="${member.memberId}">
 						</div>
 					</div>	
-					<div class="mb-3 row">
-						<label for="staticNick" class="col-sm-2 col-form-label">닉네임</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="staticNick" value="닉네임테스트">
-						</div>
+					
+					<div class="input-group mb-3">
+						<label for="phone" class="col-sm-2 col-form-label">닉네임</label>
+						<input type="text" class="form-control" th:value="${member.nickname}" name="nickname" id="nickname" aria-describedby="button-addon2">
+						<button class="btn btn-outline-secondary" type="button" id="button-addon2" style="padding:10px 40px">중복확인</button>
 					</div>
-					<div class="mb-3 row" style="line-height:3.3em">
-						<label for="inputPassword" class="col-sm-2 col-form-label">비밀번호</label>
-						<div class="col-sm-10">
-							<input type="password" class="form-control" id="inputPassword">
-							<button class="btn btn-outline-secondary" type="button" id="button-addon2">비밀번호 변경하기</button>
-						</div>
+					
+					<div class="input-group mb-3">
+						<label for="phone" class="col-sm-2 col-form-label">비밀번호</label>
+						<input type="password" class="form-control" aria-describedby="button-addon2" name="password" id="password">
+						<button class="btn btn-outline-secondary" type="button" id="button-addon2" style="padding:10px 8px">비밀번호변경하기</button>
 					</div>
-					<div class="mb-3 row">
+					
+					<div class="input-group mb-3">
 						<label for="phone" class="col-sm-2 col-form-label">핸드폰번호</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="phone" value="010-0000-0000">
-						</div>
+						<input type="text" class="form-control" aria-describedby="button-addon2" name="hphone" id="hphone" th:value="${member.hphone}">
+						<button class="btn btn-outline-secondary" type="button" id="button-addon2" style="padding:10px 40px">인증하기</button>
 					</div>
+					
 					<div style="float:right">
-						<a href="#" class="btn btn-primary active" role="button" data-bs-toggle="button" aria-pressed="true">저장하기</a>
+						<a href="#" class="btn btn-primary active" role="button" data-bs-toggle="button" aria-pressed="true" onclick="document.getElementById('frm').submit();">저장하기</a>
 						&nbsp;
 						<a href="#" class="btn btn-primary active" role="button" data-bs-toggle="button" aria-pressed="true">탈퇴하기</a>
 						&nbsp;
 					</div>
+				</form>
 			    </div>
 		    </div>
 		</div>

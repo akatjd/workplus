@@ -111,6 +111,19 @@ public class MemberService implements UserDetailsService {
 		
 	}
 	
+	/**
+	 * 회원 id로 회원정보 전체 가져오기
+	 */
+	@Transactional
+	public Member getMembData(String memberId) {
+		
+		Member member = memberRepository.findMembData(memberId);
+		
+		return member;
+		
+	}
+	
+	@Transactional
 	public String getFileCours(String memberId) {
 		
 		// memberId로 memberSeq 값 가져오기
@@ -120,5 +133,30 @@ public class MemberService implements UserDetailsService {
 		String fileCours = filesRepository.getFileCours(Long.valueOf(memberSeq), "MEMBER");
 		
 		return fileCours;
+	}
+	
+	// 비밀번호 매칭하기
+	@Transactional
+	public boolean pwChk(String memberId, String password) {
+		
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String encodedPw = memberRepository.getMemberPw(memberId);
+		System.out.println("encodedPw : " + encodedPw);
+		boolean pwChk = encoder.matches(password, encodedPw);
+		System.out.println(pwChk);
+		return pwChk;
+		
+	}
+	
+	// 마이페이지 프로필 업데이트
+	@Transactional
+	public int updateProfile(String memberId, String nickname, String hphone) {
+		
+		System.out.println(memberId);
+		System.out.println(nickname);
+		System.out.println(hphone);
+		
+		return memberRepository.updateProfile(memberId, nickname, hphone);
+				
 	}
 }

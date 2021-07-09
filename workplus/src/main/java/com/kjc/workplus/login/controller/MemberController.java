@@ -24,15 +24,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kjc.workplus.constant.Method;
 import com.kjc.workplus.files.dto.FilesDto;
 import com.kjc.workplus.files.service.FilesService;
 import com.kjc.workplus.files.utils.MD5Generator;
+import com.kjc.workplus.login.domain.Member;
 import com.kjc.workplus.login.dto.MemberDto;
 import com.kjc.workplus.login.service.MemberService;
+import com.kjc.workplus.util.UiUtils;
 
 @Controller
 @RequestMapping("/workplus")
-public class MemberController {
+public class MemberController extends UiUtils {
 	
 	Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -195,5 +198,56 @@ public class MemberController {
     	return result;
     	
     }
+    
+    // 마이페이지 프로필 관리창 열기
+    @GetMapping("/member/manageProfile.do")
+	public String manageProfile(Authentication authentication, Model model) {
+		
+		// UsernamePasswordAuthenticationToken에 넣었던 UserDetails 객체 반환
+		UserDetails userVO = (UserDetails) authentication.getPrincipal();
+		String memberId = userVO.getUsername();
+		System.out.println("ID정보 : " + userVO.getUsername());
+		
+		// 회원정보 가져오기
+		Member member = memberService.getMembData(memberId);
+
+		// 프로필 사진 경로 가져오기
+		String fileCours = memberService.getFileCours(userVO.getUsername());
+		
+		String[] splitFile = fileCours.split("\\\\");
+		
+		fileCours = splitFile[splitFile.length-2] + "\\" + splitFile[splitFile.length-1];
+		
+		model.addAttribute("member", member);
+		model.addAttribute("fileCours", fileCours);
+		
+		return "mypage/profile_manage";
+	}
+    
+    // 마이페이지 프로필 업데이트 하기
+    @PostMapping("/member/updateProfile.do")
+	public String updateProfile(@RequestParam("file") MultipartFile[] file, MemberDto memberDto, Model model) {
+    	
+    	boolean pwChk = memberService.pwChk(memberDto.getMemberId(), memberDto.getPassword());
+    	
+    	if(pwChk == false) {
+    		
+    		return showMessageWithRedirect("비밀번호가 틀렸습니다.", "/workplus/member/manageProfile.do", Method.GET, null, model);
+    		
+    	}
+    	
+    	int resultUpdate = memberService.updateProfile(memberDto.getMemberId(), memberDto.getNickname(), memberDto.getHphone()); 
+    	
+    	if(resultUpdate == 1) {
+    		
+    		return showMessageWithRedirect("수정 되었습니다.", "/workplus/member/manageProfile.do", Method.GET, null, model);
+    		
+    	}else {
+    		
+    		return showMessageWithRedirect("프로필 수정에 실패했습니다.", "/workplus/member/manageProfile.do", Method.GET, null, model);
+    		
+    	}
+    	
+	}
 
 }

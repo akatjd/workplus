@@ -54,8 +54,10 @@
 			<div class="myPage">
 			    <div class="left">
 			      왼쪽<br>
-			      <img th:src="'/upload/' + ${fileCours}"><br>
-				  <a th:href="@{/workplus/mypage/manageProfile.do}" class="btn btn-primary active" role="button" data-bs-toggle="button" aria-pressed="true">프로필 관리</a>		  
+			      <img th:src="'/upload/' + ${fileCours}" width="200" height="200"><br>
+			      <div style="float:left;position:relative;left:10%">
+				  	<a th:href="@{/workplus/member/manageProfile.do}" class="btn btn-primary active" role="button" data-bs-toggle="button" aria-pressed="true">프로필 관리</a>
+				  </div>		  
 			    </div>
 			    <div class="right">
 			      오른쪽
