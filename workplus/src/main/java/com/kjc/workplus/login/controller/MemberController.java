@@ -229,11 +229,14 @@ public class MemberController extends UiUtils {
 	public String updateProfile(@RequestParam("file") MultipartFile[] file, MemberDto memberDto, Model model) {
     	
     	boolean pwChk = memberService.pwChk(memberDto.getMemberId(), memberDto.getPassword());
+    	int nickChk = memberService.nickChk(memberDto.getNickname());
     	
     	if(pwChk == false) {
     		
     		return showMessageWithRedirect("비밀번호가 틀렸습니다.", "/workplus/member/manageProfile.do", Method.GET, null, model);
     		
+    	}else if(nickChk == 1) {
+    		return showMessageWithRedirect("중복 닉네임입니다.", "/workplus/member/manageProfile.do", Method.GET, null, model);
     	}
     	
     	int resultUpdate = memberService.updateProfile(memberDto.getMemberId(), memberDto.getNickname(), memberDto.getHphone()); 
@@ -249,5 +252,13 @@ public class MemberController extends UiUtils {
     	}
     	
 	}
+    
+    // 비밀번호 변경 팝업 띄우기
+    @GetMapping("/member/update_pw_pop_up.do")
+    public String updatePwPopUp() {
+    	
+    	return "mypage/update_pw_pop_up";
+    	
+    }
 
 }
